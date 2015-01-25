@@ -39,7 +39,7 @@
  * Very fast non cryptographic hash
  */
 
-#include "algorithm.h"
+#include "spookyhash.h"
 
 SPOOKYHASH_FORCE_INLINE uint_fast64_t spookyhash_rotate(uint_fast64_t x, int_fast8_t k) {
     return (x << k) | (x >> (64 - k));
@@ -79,6 +79,45 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short_end(uint_fast64_t *restrict h0, ui
     *h1 ^= *h0;
     *h0 = spookyhash_rotate(*h0, 63);
     *h1 += *h0;
+}
+
+SPOOKYHASH_FORCE_INLINE void spookyhash_short_mix(uint_fast64_t *restrict h0, uint_fast64_t *restrict h1, uint_fast64_t *restrict h2, uint_fast64_t *restrict h3) {
+    *h2 = spookyhash_rotate(*h2, 50);
+    *h2 += *h3;
+    *h0 ^= *h2;
+    *h3 = spookyhash_rotate(*h3, 52);
+    *h3 += *h0;
+    *h1 ^= *h3;
+    *h0 = spookyhash_rotate(*h0, 30);
+    *h0 += *h1;
+    *h2 ^= *h0;
+    *h1 = spookyhash_rotate(*h1, 41);
+    *h1 += *h2;
+    *h3 ^= *h1;
+    *h2 = spookyhash_rotate(*h2, 54);
+    *h2 += *h3;
+    *h0 ^= *h2;
+    *h3 = spookyhash_rotate(*h3, 48);
+    *h3 += *h0;
+    *h1 ^= *h3;
+    *h0 = spookyhash_rotate(*h0, 38);
+    *h0 += *h1;
+    *h2 ^= *h0;
+    *h1 = spookyhash_rotate(*h1, 37);
+    *h1 += *h2;
+    *h3 ^= *h1;
+    *h2 = spookyhash_rotate(*h2, 62);
+    *h2 += *h3;
+    *h0 ^= *h2;
+    *h3 = spookyhash_rotate(*h3, 34);
+    *h3 += *h0;
+    *h1 ^= *h3;
+    *h0 = spookyhash_rotate(*h0, 5);
+    *h0 += *h1;
+    *h2 ^= *h0;
+    *h1 = spookyhash_rotate(*h1, 36);
+    *h1 += *h2;
+    *h3 ^= *h1;
 }
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size_t length, uint_fast64_t *restrict hash1, uint_fast64_t *restrict hash2) {
@@ -276,7 +315,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_end_partial(uint_fast64_t *restrict h0, 
     *h0 = spookyhash_rotate(*h0, 54);
 }
 
-SPOOKYHASH_FORCE_INLINE void spookyhash_hash_end(const uint_fast64_t *restrict data, uint_fast64_t *restrict h0, uint_fast64_t *restrict h1, uint_fast64_t *restrict h2, uint_fast64_t *restrict h3, uint_fast64_t *restrict h4, uint_fast64_t *restrict h5, uint_fast64_t *restrict h6, uint_fast64_t *restrict h7, uint_fast64_t *restrict h8, uint_fast64_t *restrict h9, uint_fast64_t *restrict h10, uint_fast64_t *restrict h11) {
+SPOOKYHASH_FORCE_INLINE void spookyhash_end(const uint_fast64_t *restrict data, uint_fast64_t *restrict h0, uint_fast64_t *restrict h1, uint_fast64_t *restrict h2, uint_fast64_t *restrict h3, uint_fast64_t *restrict h4, uint_fast64_t *restrict h5, uint_fast64_t *restrict h6, uint_fast64_t *restrict h7, uint_fast64_t *restrict h8, uint_fast64_t *restrict h9, uint_fast64_t *restrict h10, uint_fast64_t *restrict h11) {
     *h0 += data[0];
     *h1 += data[1];
     *h2 += data[2];

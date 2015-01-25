@@ -39,10 +39,9 @@
  * Very fast non cryptographic hash
  */
 
-#ifndef SPOOKYHASH_ALGORITHM_H
-#define SPOOKYHASH_ALGORITHM_H
+#ifndef SPOOKYHASH_H
+#define SPOOKYHASH_H
 
-#include "globals.h"
 #include "context.h"
 #include <strings.h>
 

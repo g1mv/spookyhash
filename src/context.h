@@ -44,17 +44,16 @@
 
 #include "globals.h"
 
-const size_t sc_numVars = 12;
-const size_t sc_blockSize = sc_numVars * 8;
-const size_t sc_bufSize = 2 * sc_blockSize;
-const uint_fast64_t sc_const = 0xdeadbeefdeadbeefLL;
+#define sc_numVars 12
+#define sc_blockSize (sc_numVars * 8)
+#define sc_bufSize (2 * sc_blockSize)
+#define sc_const 0xdeadbeefdeadbeefLL
 
 typedef struct {
     uint_fast64_t m_data[2 * sc_numVars];
     uint_fast64_t m_state[sc_numVars];
     size_t m_length;
     uint_fast8_t m_remainder;
-    uint_fast64_t buffer[2 * sc_numVars];
 } spookyhash_context;
 
 spookyhash_context *spookyhash_context_allocate(void *(*)(size_t));
