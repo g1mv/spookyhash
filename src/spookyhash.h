@@ -57,7 +57,7 @@ void spookyhash_update(spookyhash_context *, const void *, size_t);
 
 void spookyhash_final(spookyhash_context *, uint_fast64_t *, uint_fast64_t *);
 
-uint_fast64_t spookyhash_rotate(uint_fast64_t, int_fast8_t);
+uint_fast64_t spookyhash_rotate(uint_fast64_t, uint_fast8_t);
 
 void spookyhash_mix(const uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *, uint_fast64_t *);
 

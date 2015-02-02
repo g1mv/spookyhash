@@ -41,7 +41,7 @@
 
 #include "spookyhash.h"
 
-SPOOKYHASH_FORCE_INLINE uint_fast64_t spookyhash_rotate(uint_fast64_t x, int_fast8_t k) {
+SPOOKYHASH_FORCE_INLINE uint_fast64_t spookyhash_rotate(uint_fast64_t x, uint_fast8_t k) {
     return (x << k) | (x >> (64 - k));
 }
 
