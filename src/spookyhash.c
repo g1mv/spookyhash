@@ -121,8 +121,8 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short_mix(uint_fast64_t *restrict h0, ui
 }
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size_t length, uint_fast64_t *restrict hash1, uint_fast64_t *restrict hash2) {
-#if !SPOOKYHASH_SPOOKY_HASH_ALLOW_UNALIGNED_READS
-    uint_fast64_t buffer[2 * sc_numVars];
+#if !SPOOKYHASH_ALLOW_UNALIGNED_READS
+    uint_fast64_t buffer[2 * SPOOKYHASH_VARIABLES];
 #endif
 
     union {
@@ -133,7 +133,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size
     } u;
     u.p8 = (const uint_fast8_t *) message;
 
-#if !SPOOKYHASH_SPOOKY_HASH_ALLOW_UNALIGNED_READS
+#if !SPOOKYHASH_ALLOW_UNALIGNED_READS
     if (u.i & 0x7) {
         memcpy(buffer, message, length);
         u.p64 = buffer;
@@ -143,22 +143,22 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size
     size_t remainder = length % 32;
     uint_fast64_t a = *hash1;
     uint_fast64_t b = *hash2;
-    uint_fast64_t c = sc_const;
-    uint_fast64_t d = sc_const;
+    uint_fast64_t c = SPOOKYHASH_CONSTANT;
+    uint_fast64_t d = SPOOKYHASH_CONSTANT;
 
     if (length > 15) {
         const uint_fast64_t *end = u.p64 + (length / 32) * 4;
         for (; u.p64 < end; u.p64 += 4) {
-            c += u.p64[0];
-            d += u.p64[1];
+            c += SPOOKYHASH_LITTLE_ENDIAN_64(u.p64[0]);
+            d += SPOOKYHASH_LITTLE_ENDIAN_64(u.p64[1]);
             spookyhash_short_mix(&a, &b, &c, &d);
-            a += u.p64[2];
-            b += u.p64[3];
+            a += SPOOKYHASH_LITTLE_ENDIAN_64(u.p64[2]);
+            b += SPOOKYHASH_LITTLE_ENDIAN_64(u.p64[3]);
         }
 
         if (remainder >= 16) {
-            c += u.p64[0];
-            d += u.p64[1];
+            c += SPOOKYHASH_LITTLE_ENDIAN_64(u.p64[0]);
+            d += SPOOKYHASH_LITTLE_ENDIAN_64(u.p64[1]);
             spookyhash_short_mix(&a, &b, &c, &d);
             u.p64 += 2;
             remainder -= 16;
@@ -205,8 +205,8 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size
             c += (uint_fast64_t) u.p8[0];
             break;
         case 0:
-            c += sc_const;
-            d += sc_const;
+            c += SPOOKYHASH_CONSTANT;
+            d += SPOOKYHASH_CONSTANT;
     }
     spookyhash_short_end(&a, &b, &c, &d);
     *hash1 = a;
@@ -214,62 +214,62 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size
 }
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_mix(const uint_fast64_t *restrict data, uint_fast64_t *restrict s0, uint_fast64_t *restrict s1, uint_fast64_t *restrict s2, uint_fast64_t *restrict s3, uint_fast64_t *restrict s4, uint_fast64_t *restrict s5, uint_fast64_t *restrict s6, uint_fast64_t *restrict s7, uint_fast64_t *restrict s8, uint_fast64_t *restrict s9, uint_fast64_t *restrict s10, uint_fast64_t *restrict s11) {
-    *s0 += data[0];
+    *s0 += SPOOKYHASH_LITTLE_ENDIAN_64(data[0]);
     *s2 ^= *s10;
     *s11 ^= *s0;
     *s0 = spookyhash_rotate(*s0, 11);
     *s11 += *s1;
-    *s1 += data[1];
+    *s1 += SPOOKYHASH_LITTLE_ENDIAN_64(data[1]);
     *s3 ^= *s11;
     *s0 ^= *s1;
     *s1 = spookyhash_rotate(*s1, 32);
     *s0 += *s2;
-    *s2 += data[2];
+    *s2 += SPOOKYHASH_LITTLE_ENDIAN_64(data[2]);
     *s4 ^= *s0;
     *s1 ^= *s2;
     *s2 = spookyhash_rotate(*s2, 43);
     *s1 += *s3;
-    *s3 += data[3];
+    *s3 += SPOOKYHASH_LITTLE_ENDIAN_64(data[3]);
     *s5 ^= *s1;
     *s2 ^= *s3;
     *s3 = spookyhash_rotate(*s3, 31);
     *s2 += *s4;
-    *s4 += data[4];
+    *s4 += SPOOKYHASH_LITTLE_ENDIAN_64(data[4]);
     *s6 ^= *s2;
     *s3 ^= *s4;
     *s4 = spookyhash_rotate(*s4, 17);
     *s3 += *s5;
-    *s5 += data[5];
+    *s5 += SPOOKYHASH_LITTLE_ENDIAN_64(data[5]);
     *s7 ^= *s3;
     *s4 ^= *s5;
     *s5 = spookyhash_rotate(*s5, 28);
     *s4 += *s6;
-    *s6 += data[6];
+    *s6 += SPOOKYHASH_LITTLE_ENDIAN_64(data[6]);
     *s8 ^= *s4;
     *s5 ^= *s6;
     *s6 = spookyhash_rotate(*s6, 39);
     *s5 += *s7;
-    *s7 += data[7];
+    *s7 += SPOOKYHASH_LITTLE_ENDIAN_64(data[7]);
     *s9 ^= *s5;
     *s6 ^= *s7;
     *s7 = spookyhash_rotate(*s7, 57);
     *s6 += *s8;
-    *s8 += data[8];
+    *s8 += SPOOKYHASH_LITTLE_ENDIAN_64(data[8]);
     *s10 ^= *s6;
     *s7 ^= *s8;
     *s8 = spookyhash_rotate(*s8, 55);
     *s7 += *s9;
-    *s9 += data[9];
+    *s9 += SPOOKYHASH_LITTLE_ENDIAN_64(data[9]);
     *s11 ^= *s7;
     *s8 ^= *s9;
     *s9 = spookyhash_rotate(*s9, 54);
     *s8 += *s10;
-    *s10 += data[10];
+    *s10 += SPOOKYHASH_LITTLE_ENDIAN_64(data[10]);
     *s0 ^= *s8;
     *s9 ^= *s10;
     *s10 = spookyhash_rotate(*s10, 22);
     *s9 += *s11;
-    *s11 += data[11];
+    *s11 += SPOOKYHASH_LITTLE_ENDIAN_64(data[11]);
     *s1 ^= *s9;
     *s10 ^= *s11;
     *s11 = spookyhash_rotate(*s11, 46);
@@ -316,31 +316,31 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_end_partial(uint_fast64_t *restrict h0, 
 }
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_end(const uint_fast64_t *restrict data, uint_fast64_t *restrict h0, uint_fast64_t *restrict h1, uint_fast64_t *restrict h2, uint_fast64_t *restrict h3, uint_fast64_t *restrict h4, uint_fast64_t *restrict h5, uint_fast64_t *restrict h6, uint_fast64_t *restrict h7, uint_fast64_t *restrict h8, uint_fast64_t *restrict h9, uint_fast64_t *restrict h10, uint_fast64_t *restrict h11) {
-    *h0 += data[0];
-    *h1 += data[1];
-    *h2 += data[2];
-    *h3 += data[3];
-    *h4 += data[4];
-    *h5 += data[5];
-    *h6 += data[6];
-    *h7 += data[7];
-    *h8 += data[8];
-    *h9 += data[9];
-    *h10 += data[10];
-    *h11 += data[11];
+    *h0 += SPOOKYHASH_LITTLE_ENDIAN_64(data[0]);
+    *h1 += SPOOKYHASH_LITTLE_ENDIAN_64(data[1]);
+    *h2 += SPOOKYHASH_LITTLE_ENDIAN_64(data[2]);
+    *h3 += SPOOKYHASH_LITTLE_ENDIAN_64(data[3]);
+    *h4 += SPOOKYHASH_LITTLE_ENDIAN_64(data[4]);
+    *h5 += SPOOKYHASH_LITTLE_ENDIAN_64(data[5]);
+    *h6 += SPOOKYHASH_LITTLE_ENDIAN_64(data[6]);
+    *h7 += SPOOKYHASH_LITTLE_ENDIAN_64(data[7]);
+    *h8 += SPOOKYHASH_LITTLE_ENDIAN_64(data[8]);
+    *h9 += SPOOKYHASH_LITTLE_ENDIAN_64(data[9]);
+    *h10 += SPOOKYHASH_LITTLE_ENDIAN_64(data[10]);
+    *h11 += SPOOKYHASH_LITTLE_ENDIAN_64(data[11]);
     spookyhash_end_partial(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11);
     spookyhash_end_partial(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11);
     spookyhash_end_partial(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11);
 }
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_128(const void *restrict message, size_t length, uint_fast64_t *restrict hash1, uint_fast64_t *restrict hash2) {
-    if (length < sc_bufSize) {
+    if (length < SPOOKYHASH_BUFFER_SIZE) {
         spookyhash_short(message, length, hash1, hash2);
         return;
     }
 
     uint_fast64_t h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11;
-    uint_fast64_t buf[sc_numVars];
+    uint_fast64_t buf[SPOOKYHASH_VARIABLES];
     uint_fast64_t *end;
     union {
         const uint_fast8_t *p8;
@@ -351,28 +351,28 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_128(const void *restrict message, size_t
 
     h0 = h3 = h6 = h9 = *hash1;
     h1 = h4 = h7 = h10 = *hash2;
-    h2 = h5 = h8 = h11 = sc_const;
+    h2 = h5 = h8 = h11 = SPOOKYHASH_CONSTANT;
 
     u.p8 = (const uint_fast8_t *) message;
-    end = u.p64 + (length / sc_blockSize) * sc_numVars;
+    end = u.p64 + (length / SPOOKYHASH_BLOCK_SIZE) * SPOOKYHASH_VARIABLES;
 
     if (SPOOKYHASH_ALLOW_UNALIGNED_READS || ((u.i & 0x7) == 0)) {
         while (u.p64 < end) {
             spookyhash_mix(u.p64, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
-            u.p64 += sc_numVars;
+            u.p64 += SPOOKYHASH_VARIABLES;
         }
     } else {
         while (u.p64 < end) {
-            memcpy(buf, u.p64, sc_blockSize);
+            memcpy(buf, u.p64, SPOOKYHASH_BLOCK_SIZE);
             spookyhash_mix(buf, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
-            u.p64 += sc_numVars;
+            u.p64 += SPOOKYHASH_VARIABLES;
         }
     }
 
     remainder = (length - ((const uint_fast8_t *) end - (const uint_fast8_t *) message));
     memcpy(buf, end, remainder);
-    memset(((uint_fast8_t *) buf) + remainder, 0, sc_blockSize - remainder);
-    ((uint_fast8_t *) buf)[sc_blockSize - 1] = (uint_fast8_t) remainder;
+    memset(((uint_fast8_t *) buf) + remainder, 0, SPOOKYHASH_BLOCK_SIZE - remainder);
+    ((uint_fast8_t *) buf)[SPOOKYHASH_BLOCK_SIZE - 1] = (uint_fast8_t) remainder;
 
     spookyhash_end(buf, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
     *hash1 = h0;
@@ -402,17 +402,17 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyhash_context *restrict cont
     } u;
     const uint_fast64_t *end;
 
-    if (newLength < sc_bufSize) {
+    if (newLength < SPOOKYHASH_BUFFER_SIZE) {
         memcpy(&((uint_fast8_t *) context->m_data)[context->m_remainder], message, length);
         context->m_length = length + context->m_length;
         context->m_remainder = (uint_fast8_t) newLength;
         return;
     }
 
-    if (context->m_length < sc_bufSize) {
+    if (context->m_length < SPOOKYHASH_BUFFER_SIZE) {
         h0 = h3 = h6 = h9 = context->m_state[0];
         h1 = h4 = h7 = h10 = context->m_state[1];
-        h2 = h5 = h8 = h11 = sc_const;
+        h2 = h5 = h8 = h11 = SPOOKYHASH_CONSTANT;
     }
     else {
         h0 = context->m_state[0];
@@ -431,30 +431,30 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyhash_context *restrict cont
     context->m_length = length + context->m_length;
 
     if (context->m_remainder) {
-        uint_fast8_t prefix = (uint_fast8_t) (sc_bufSize - context->m_remainder);
+        uint_fast8_t prefix = (uint_fast8_t) (SPOOKYHASH_BUFFER_SIZE - context->m_remainder);
         memcpy(&(((uint_fast8_t *) context->m_data)[context->m_remainder]), message, prefix);
         u.p64 = context->m_data;
         spookyhash_mix(u.p64, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
-        spookyhash_mix(&u.p64[sc_numVars], &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
+        spookyhash_mix(&u.p64[SPOOKYHASH_VARIABLES], &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
         u.p8 = ((const uint_fast8_t *) message) + prefix;
         length -= prefix;
     } else {
         u.p8 = (const uint_fast8_t *) message;
     }
 
-    end = u.p64 + (length / sc_blockSize) * sc_numVars;
+    end = u.p64 + (length / SPOOKYHASH_BLOCK_SIZE) * SPOOKYHASH_VARIABLES;
     remainder = (uint_fast8_t) (length - ((const uint_fast8_t *) end - u.p8));
     if (SPOOKYHASH_ALLOW_UNALIGNED_READS || (u.i & 0x7) == 0) {
         while (u.p64 < end) {
             spookyhash_mix(u.p64, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
-            u.p64 += sc_numVars;
+            u.p64 += SPOOKYHASH_VARIABLES;
         }
     }
     else {
         while (u.p64 < end) {
-            memcpy(context->m_data, u.p8, sc_blockSize);
+            memcpy(context->m_data, u.p8, SPOOKYHASH_BLOCK_SIZE);
             spookyhash_mix(context->m_data, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
-            u.p64 += sc_numVars;
+            u.p64 += SPOOKYHASH_VARIABLES;
         }
     }
 
@@ -477,7 +477,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyhash_context *restrict cont
 
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_final(spookyhash_context *restrict context, uint_fast64_t *restrict hash1, uint_fast64_t *restrict hash2) {
-    if (context->m_length < sc_bufSize) {
+    if (context->m_length < SPOOKYHASH_BUFFER_SIZE) {
         *hash1 = context->m_state[0];
         *hash2 = context->m_state[1];
         spookyhash_short(context->m_data, context->m_length, hash1, hash2);
@@ -500,15 +500,15 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_final(spookyhash_context *restrict conte
     uint_fast64_t h10 = context->m_state[10];
     uint_fast64_t h11 = context->m_state[11];
 
-    if (remainder >= sc_blockSize) {
+    if (remainder >= SPOOKYHASH_BLOCK_SIZE) {
         spookyhash_mix(data, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
-        data += sc_numVars;
-        remainder -= sc_blockSize;
+        data += SPOOKYHASH_VARIABLES;
+        remainder -= SPOOKYHASH_BLOCK_SIZE;
     }
 
-    memset(&((uint_fast8_t *) data)[remainder], 0, (sc_blockSize - remainder));
+    memset(&((uint_fast8_t *) data)[remainder], 0, (SPOOKYHASH_BLOCK_SIZE - remainder));
 
-    ((uint_fast8_t *) data)[sc_blockSize - 1] = remainder;
+    ((uint_fast8_t *) data)[SPOOKYHASH_BLOCK_SIZE - 1] = remainder;
 
     spookyhash_end(data, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
 

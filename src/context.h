@@ -44,14 +44,14 @@
 
 #include "globals.h"
 
-#define sc_numVars 12
-#define sc_blockSize (sc_numVars * 8)
-#define sc_bufSize (2 * sc_blockSize)
-#define sc_const 0xdeadbeefdeadbeefLL
+#define SPOOKYHASH_VARIABLES (12)
+#define SPOOKYHASH_BLOCK_SIZE (SPOOKYHASH_VARIABLES * 8)
+#define SPOOKYHASH_BUFFER_SIZE (2 * SPOOKYHASH_BLOCK_SIZE)
+#define SPOOKYHASH_CONSTANT (0xdeadbeefdeadbeefLL)
 
 typedef struct {
-    uint_fast64_t m_data[2 * sc_numVars];
-    uint_fast64_t m_state[sc_numVars];
+    uint_fast64_t m_data[2 * SPOOKYHASH_VARIABLES];
+    uint_fast64_t m_state[SPOOKYHASH_VARIABLES];
     size_t m_length;
     uint_fast8_t m_remainder;
 } spookyhash_context;
