@@ -41,17 +41,17 @@
 
 #include "context.h"
 
-spookyhash_context* spookyhash_context_allocate(void *(*mem_alloc)(size_t)) {
+SPOOKYHASH_FORCE_INLINE spookyhash_context* spookyhash_context_allocate(void *(*mem_alloc)(size_t)) {
     void *(*memory_alloc)(size_t) = mem_alloc == NULL ? malloc : mem_alloc;
     return (spookyhash_context *) memory_alloc(sizeof(spookyhash_context));
 }
 
-void spookyhash_context_free(spookyhash_context* context, void (*mem_free)(void *)) {
+SPOOKYHASH_FORCE_INLINE void spookyhash_context_free(spookyhash_context* context, void (*mem_free)(void *)) {
     void (*memory_free)(void *) = mem_free == NULL ? free : mem_free;
     memory_free(context);
 }
 
-void spookyhash_context_init(spookyhash_context *context, uint_fast64_t seed1, uint_fast64_t seed2) {
+SPOOKYHASH_FORCE_INLINE void spookyhash_context_init(spookyhash_context *context, uint_fast64_t seed1, uint_fast64_t seed2) {
     context->m_length = 0;
     context->m_remainder = 0;
     context->m_state[0] = seed1;
