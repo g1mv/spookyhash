@@ -5,7 +5,7 @@
 * Added inlining for all functions
 * Reverted to using uintN_t instead of uint_fastN_t due to bitwise shift problems
 * Defined rotate function as macro
-* Added makefile to build spookyhash as a library
+* Added makefiles
 
 1.0.0
 -----
