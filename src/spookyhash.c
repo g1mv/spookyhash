@@ -41,9 +41,6 @@
 
 #include "spookyhash.h"
 
-#define SPOOKYHASH_ALLOW_UNALIGNED_READS   1
-#define SPOOKYHASH_ROTATE(x, k) (((x) << (k)) | (((x) >> (64 - (k)))))
-
 SPOOKYHASH_FORCE_INLINE void spookyhash_short_end(uint64_t *restrict h0, uint64_t *restrict h1, uint64_t *restrict h2, uint64_t *restrict h3) {
     *h3 ^= *h2;
     *h2 = SPOOKYHASH_ROTATE(*h2, 15);
