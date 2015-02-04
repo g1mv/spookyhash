@@ -77,7 +77,7 @@ link: compile link-header $(TARGET)$(STAT_EXT) $(TARGET)$(DYN_EXT)
 
 $(TARGET)$(DYN_EXT): $(ALL_OBJ)
 	@echo $^ $(ARROW) ${bold}$(TARGET)$(DYN_EXT)${normal}
-	@$(CC) -shared -o $(TARGET)$(DYN_EXT) $^ $(CFLAGS)
+	@$(CC) -shared -o $(TARGET)$(DYN_EXT) $^
 
 $(TARGET)$(STAT_EXT): $(ALL_OBJ)
 	@echo $^ $(ARROW) ${bold}$(TARGET)$(STAT_EXT)${normal}
