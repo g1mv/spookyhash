@@ -50,16 +50,16 @@
 #define SPOOKYHASH_CONSTANT (0xdeadbeefdeadbeefLL)
 
 typedef struct {
-    uint_fast64_t m_data[2 * SPOOKYHASH_VARIABLES];
-    uint_fast64_t m_state[SPOOKYHASH_VARIABLES];
+    uint64_t m_data[2 * SPOOKYHASH_VARIABLES];
+    uint64_t m_state[SPOOKYHASH_VARIABLES];
     size_t m_length;
-    uint_fast8_t m_remainder;
+    uint8_t m_remainder;
 } spookyhash_context;
 
 spookyhash_context *spookyhash_context_allocate(void *(*)(size_t));
 
 void spookyhash_context_free(spookyhash_context *, void (*)(void *));
 
-void spookyhash_context_init(spookyhash_context *, uint_fast64_t, uint_fast64_t);
+void spookyhash_context_init(spookyhash_context *, uint64_t, uint64_t);
 
 #endif

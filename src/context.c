@@ -51,7 +51,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_context_free(spookyhash_context* context
     memory_free(context);
 }
 
-SPOOKYHASH_FORCE_INLINE void spookyhash_context_init(spookyhash_context *context, uint_fast64_t seed1, uint_fast64_t seed2) {
+SPOOKYHASH_FORCE_INLINE void spookyhash_context_init(spookyhash_context *context, uint64_t seed1, uint64_t seed2) {
     context->m_length = 0;
     context->m_remainder = 0;
     context->m_state[0] = seed1;
