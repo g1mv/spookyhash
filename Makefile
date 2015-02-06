@@ -26,26 +26,23 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# 4/02/15 19:44
+# 6/02/15 14:38
 #
+
+TARGET = spookyhash
+CFLAGS = -O3 -w -flto -std=c99
+
+SRC_DIRECTORY = ./src/
 
 ifeq ($(OS),Windows_NT)
     bold =
     normal =
-else
-    bold = `tput bold`
-    normal = `tput sgr0`
-endif
-
-TARGET = spookyhash
-
-CFLAGS = -flto -std=c99 -fPIC
-
-ifeq ($(OS),Windows_NT)
     DYN_EXT = .dll
     STAT_EXT = .lib
     ARROW = ^-^>
 else
+    bold = `tput bold`
+    normal = `tput sgr0`
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         DYN_EXT = .so
@@ -57,63 +54,52 @@ else
     ARROW = \-\>
 endif
 
-ifdef ARCH
-    CFLAGS += -m$(ARCH)
-endif
+SPOOKYHASH_SRC = $(wildcard $(SRC_DIRECTORY)*.c)
+SPOOKYHASH_OBJ = $(SPOOKYHASH_SRC:.c=.o)
+ALL_OBJ = $(SPOOKYHASH_OBJ)
 
-ifndef WARNINGS
-    CFLAGS += -w
-else
-    CFLAGS += -Wall
-endif
+.PHONY: compile-header compile-library-header link-header
 
-ifndef DEBUG
-    CFLAGS += -O4
-else
-    CFLAGS += -O0 -g
-endif
+all: $(TARGET)$(DYN_EXT) $(TARGET)$(STAT_EXT)
 
-CC = @$(PREFIX)cc
-
-SRC = $(wildcard *.c)
-OBJ = $(SRC:.c=.o)
-
-ALL_OBJ = $(OBJ)
-
-.PHONY: compile-header compile link-header link
-
-all: compile-header compile link-header link
+%.o: %.c
+	@echo $^ $(ARROW) $@
+	@$(CC) -c $(CFLAGS) $< -o $@
 
 compile-header:
 	@echo ${bold}Compiling SpookyHash${normal} ...
 
-link-header:
+compile-library-header:
+	@$(eval CFLAGS = $(CFLAGS) -fPIC)
+	@echo ${bold}Compiling SpookyHash as a library${normal} ...
+
+compile: compile-header $(SPOOKYHASH_OBJ)
+	@echo Done.
+	@echo
+
+compile-library: compile-library-header $(SPOOKYHASH_OBJ)
+	@echo Done.
+	@echo
+
+link-header: compile-library
 	@echo ${bold}Linking SpookyHash${normal} ...
 
-compile: compile-header $(ALL_OBJ)
+$(TARGET)$(DYN_EXT): link-header $(ALL_OBJ)
+	@echo *.o $(ARROW) ${bold}$(TARGET)$(DYN_EXT)${normal}
+	@$(CC) -shared -o $(TARGET)$(DYN_EXT) $(ALL_OBJ)
 	@echo Done.
 	@echo
 
-link: compile link-header $(TARGET)$(STAT_EXT) $(TARGET)$(DYN_EXT)
-	@echo Done.
-	@echo
-
-$(TARGET)$(DYN_EXT): $(ALL_OBJ)
-	@echo $^ $(ARROW) ${bold}$(TARGET)$(DYN_EXT)${normal}
-	$(CC) -shared -o $(TARGET)$(DYN_EXT) $^ $(CFLAGS)
-
-$(TARGET)$(STAT_EXT): $(ALL_OBJ)
-	@echo $^ $(ARROW) ${bold}$(TARGET)$(STAT_EXT)${normal}
-	@ar r $(TARGET)$(STAT_EXT) $^
+$(TARGET)$(STAT_EXT): link-header $(ALL_OBJ)
+	@echo *.o $(ARROW) ${bold}$(TARGET)$(STAT_EXT)${normal}
+	@ar r $(TARGET)$(STAT_EXT) $(ALL_OBJ)
 	@ranlib $(TARGET)$(STAT_EXT)
-
-%.o: %.c
-	@echo $^ $(ARROW) $@
-	$(CC) -c $(CFLAGS) $< -o $@
+	@echo Done.
+	@echo
 
 clean:
-	@echo ${bold}Cleaning SpookyHash build directories${normal} ...
-	@rm -f $(ALL_OBJ)
+	@echo ${bold}Cleaning SpookyHash objects${normal} ...
+	@rm -f $(SPOOKYHASH_OBJ)
 	@rm -f $(TARGET)$(DYN_EXT)
 	@rm -f $(TARGET)$(STAT_EXT)
 	@echo Done.
