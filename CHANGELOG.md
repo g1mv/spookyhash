@@ -1,3 +1,9 @@
+1.0.2
+-----
+*February 6, 2015*
+
+* Now using single Makefile
+
 1.0.1
 -----
 *February 4, 2015*
