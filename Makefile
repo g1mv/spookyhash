@@ -30,7 +30,7 @@
 #
 
 TARGET = spookyhash
-CFLAGS = -O3 -w -flto -std=c99
+CFLAGS = -Ofast -fomit-frame-pointer -w -flto -std=c99
 
 SRC_DIRECTORY = ./src/
 
