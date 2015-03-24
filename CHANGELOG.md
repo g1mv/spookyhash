@@ -1,3 +1,10 @@
+1.0.3
+-----
+*March 24, 2015*
+
+* Fixed string.h include problem
+* Improved compilation switches speed-wise
+
 1.0.2
 -----
 *February 6, 2015*
