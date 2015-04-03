@@ -43,7 +43,7 @@
 
 SPOOKYHASH_FORCE_INLINE spookyhash_context* spookyhash_context_allocate(void *(*mem_alloc)(size_t)) {
     void *(*memory_alloc)(size_t) = mem_alloc == NULL ? malloc : mem_alloc;
-    return (spookyhash_context *) memory_alloc(sizeof(spookyhash_context));
+    return memory_alloc(sizeof(spookyhash_context));
 }
 
 SPOOKYHASH_FORCE_INLINE void spookyhash_context_free(spookyhash_context* context, void (*mem_free)(void *)) {
