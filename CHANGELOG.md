@@ -1,3 +1,9 @@
+1.0.4
+-----
+*April 3, 2015*
+
+* Removed memory allocation casts
+
 1.0.3
 -----
 *March 24, 2015*
