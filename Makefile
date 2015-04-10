@@ -117,8 +117,8 @@ $(SPOOKYHASH)$(STAT_EXT): link-header $(ALL_OBJ)
 
 clean:
 	@echo ${bold}Cleaning SpookyHash objects${normal} ...
-	@rm -f $(SPOOKYHASH_OBJ)
-	@rm -f $(SPOOKYHASH)$(DYN_EXT)
-	@rm -f $(SPOOKYHASH)$(STAT_EXT)
+	@$(RM) $(SPOOKYHASH_OBJ)
+	@$(RM) $(SPOOKYHASH)$(DYN_EXT)
+	@$(RM) $(SPOOKYHASH)$(STAT_EXT)
 	@echo Done.
 	@echo
