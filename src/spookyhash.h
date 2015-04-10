@@ -48,26 +48,14 @@
 #define SPOOKYHASH_ALLOW_UNALIGNED_READS   1
 #define SPOOKYHASH_ROTATE(x, k) (((x) << (k)) | (((x) >> (64 - (k)))))
 
-void spookyhash_128(const void *, size_t, uint64_t *, uint64_t *);
+EXPORT void spookyhash_128(const void *, size_t, uint64_t *, uint64_t *);
 
-uint64_t spookyhash_64(const void *, size_t, uint64_t);
+EXPORT uint64_t spookyhash_64(const void *, size_t, uint64_t);
 
-uint32_t spookyhash_32(const void *, size_t, uint32_t);
+EXPORT uint32_t spookyhash_32(const void *, size_t, uint32_t);
 
-void spookyhash_update(spookyhash_context *, const void *, size_t);
+EXPORT void spookyhash_update(spookyhash_context *, const void *, size_t);
 
-void spookyhash_final(spookyhash_context *, uint64_t *, uint64_t *);
-
-void spookyhash_mix(const uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *);
-
-void spookyhash_end_partial(uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *);
-
-void spookyhash_end(const uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *, uint64_t *);
-
-void spookyhash_short_mix(uint64_t *, uint64_t *, uint64_t *, uint64_t *);
-
-void spookyhash_short_end(uint64_t *, uint64_t *, uint64_t *, uint64_t *);
-
-void spookyhash_short(const void *, size_t, uint64_t *, uint64_t *);
+EXPORT void spookyhash_final(spookyhash_context *, uint64_t *, uint64_t *);
 
 #endif

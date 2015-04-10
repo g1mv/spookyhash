@@ -29,11 +29,24 @@
 # 6/02/15 14:38
 #
 
-TARGET = spookyhash
-CFLAGS = -Ofast -fomit-frame-pointer -w -flto -std=c99
+SPOOKYHASH = spookyhash
+CFLAGS = -Ofast -fomit-frame-pointer -std=c99
 
 SRC_DIRECTORY = ./src/
 
+# Search for Clang
+CLANG_COMPILER := $(@shell clang -v)
+FLTO = -flto
+ifeq ($(CLANG_COMPILER),"")
+	COMPILER = $(CC)
+else
+	COMPILER = clang
+	ifeq ($(OS),Windows_NT)
+		FLTO = 
+	endif
+endif
+
+# OS specifics
 ifeq ($(OS),Windows_NT)
     bold =
     normal =
@@ -60,18 +73,23 @@ ALL_OBJ = $(SPOOKYHASH_OBJ)
 
 .PHONY: compile-header compile-library-header link-header
 
-all: $(TARGET)$(DYN_EXT) $(TARGET)$(STAT_EXT)
+all: $(SPOOKYHASH)$(DYN_EXT) $(SPOOKYHASH)$(STAT_EXT)
+
+error:
+	@echo ${bold}Error${normal}
+	@echo Please install one of the supported compilers (Clang, GCC).
+	exit 1
 
 %.o: %.c
 	@echo $^ $(ARROW) $@
-	@$(CC) -c $(CFLAGS) $< -o $@
+	@$(COMPILER) -c $(CFLAGS) $(FLTO) $< -o $@
 
 compile-header:
-	@echo ${bold}Compiling SpookyHash${normal} ...
+	@echo ${bold}Compiling SpookyHash${normal} using $(COMPILER) ...
 
 compile-library-header:
 	@$(eval CFLAGS = $(CFLAGS) -fPIC)
-	@echo ${bold}Compiling SpookyHash as a library${normal} ...
+	@echo ${bold}Compiling SpookyHash as a library${normal} using $(COMPILER) ...
 
 compile: compile-header $(SPOOKYHASH_OBJ)
 	@echo Done.
@@ -84,23 +102,23 @@ compile-library: compile-library-header $(SPOOKYHASH_OBJ)
 link-header: compile-library
 	@echo ${bold}Linking SpookyHash${normal} ...
 
-$(TARGET)$(DYN_EXT): link-header $(ALL_OBJ)
-	@echo *.o $(ARROW) ${bold}$(TARGET)$(DYN_EXT)${normal}
-	@$(CC) -shared -o $(TARGET)$(DYN_EXT) $(ALL_OBJ)
+$(SPOOKYHASH)$(DYN_EXT): link-header $(ALL_OBJ)
+	@echo *.o $(ARROW) ${bold}$(SPOOKYHASH)$(DYN_EXT)${normal}
+	@$(COMPILER) -shared $(FLTO) -o $(SPOOKYHASH)$(DYN_EXT) $(ALL_OBJ)
+	@$(RM) $(DENSITY).exp
 	@echo Done.
 	@echo
 
-$(TARGET)$(STAT_EXT): link-header $(ALL_OBJ)
-	@echo *.o $(ARROW) ${bold}$(TARGET)$(STAT_EXT)${normal}
-	@ar r $(TARGET)$(STAT_EXT) $(ALL_OBJ)
-	@ranlib $(TARGET)$(STAT_EXT)
+$(SPOOKYHASH)$(STAT_EXT): link-header $(ALL_OBJ)
+	@echo *.o $(ARROW) ${bold}$(SPOOKYHASH)$(STAT_EXT)${normal}
+	@ar rcs $(SPOOKYHASH)$(STAT_EXT) $(ALL_OBJ)
 	@echo Done.
 	@echo
 
 clean:
 	@echo ${bold}Cleaning SpookyHash objects${normal} ...
 	@rm -f $(SPOOKYHASH_OBJ)
-	@rm -f $(TARGET)$(DYN_EXT)
-	@rm -f $(TARGET)$(STAT_EXT)
+	@rm -f $(SPOOKYHASH)$(DYN_EXT)
+	@rm -f $(SPOOKYHASH)$(STAT_EXT)
 	@echo Done.
 	@echo

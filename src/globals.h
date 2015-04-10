@@ -45,8 +45,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stddef.h>
+
+#if defined(_WIN64) || defined(_WIN32)
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
 
 #if defined(__INTEL_COMPILER)
 #define SPOOKYHASH_FORCE_INLINE __forceinline
