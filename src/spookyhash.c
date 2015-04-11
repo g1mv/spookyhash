@@ -6,25 +6,28 @@
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of Centaurean nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *     1. Redistributions of source code must retain the above copyright notice, this
+ *        list of conditions and the following disclaimer.
+ *
+ *     2. Redistributions in binary form must reproduce the above copyright notice,
+ *        this list of conditions and the following disclaimer in the documentation
+ *        and/or other materials provided with the distribution.
+ *
+ *     3. Neither the name of the copyright holder nor the names of its
+ *        contributors may be used to endorse or promote products derived from
+ *        this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * 25/01/15 12:21
  *
@@ -329,7 +332,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_end(const uint64_t *restrict data, uint6
     spookyhash_end_partial(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11);
 }
 
-SPOOKYHASH_FORCE_INLINE void spookyhash_128(const void *restrict message, size_t length, uint64_t *restrict hash1, uint64_t *restrict hash2) {
+SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_128(const void *restrict message, size_t length, uint64_t *restrict hash1, uint64_t *restrict hash2) {
     if (length < SPOOKYHASH_BUFFER_SIZE) {
         spookyhash_short(message, length, hash1, hash2);
         return;
@@ -375,19 +378,19 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_128(const void *restrict message, size_t
     *hash2 = h1;
 }
 
-SPOOKYHASH_FORCE_INLINE uint64_t spookyhash_64(const void *message, size_t length, uint64_t seed) {
+SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE uint64_t spookyhash_64(const void *message, size_t length, uint64_t seed) {
     uint64_t hash1 = seed;
     spookyhash_128(message, length, &hash1, &seed);
     return hash1;
 }
 
-SPOOKYHASH_FORCE_INLINE uint32_t spookyhash_32(const void *message, size_t length, uint32_t seed) {
+SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE uint32_t spookyhash_32(const void *message, size_t length, uint32_t seed) {
     uint64_t hash1 = seed, hash2 = seed;
     spookyhash_128(message, length, &hash1, &hash2);
     return (uint32_t) hash1;
 }
 
-SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyhash_context *restrict context, const void *restrict message, size_t length) {
+SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyhash_context *restrict context, const void *restrict message, size_t length) {
     uint64_t h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11;
     size_t newLength = length + context->m_remainder;
     uint8_t remainder;
@@ -471,8 +474,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyhash_context *restrict cont
     context->m_state[11] = h11;
 }
 
-
-SPOOKYHASH_FORCE_INLINE void spookyhash_final(spookyhash_context *restrict context, uint64_t *restrict hash1, uint64_t *restrict hash2) {
+SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_final(spookyhash_context *restrict context, uint64_t *restrict hash1, uint64_t *restrict hash2) {
     if (context->m_length < SPOOKYHASH_BUFFER_SIZE) {
         *hash1 = context->m_state[0];
         *hash2 = context->m_state[1];
