@@ -48,14 +48,14 @@
 #define SPOOKYHASH_ALLOW_UNALIGNED_READS   1
 #define SPOOKYHASH_ROTATE(x, k) (((x) << (k)) | (((x) >> (64 - (k)))))
 
-EXPORT void spookyhash_128(const void *, size_t, uint64_t *, uint64_t *);
+SPOOKYHASH_WINDOWS_EXPORT void spookyhash_128(const void *, size_t, uint64_t *, uint64_t *);
 
-EXPORT uint64_t spookyhash_64(const void *, size_t, uint64_t);
+SPOOKYHASH_WINDOWS_EXPORT uint64_t spookyhash_64(const void *, size_t, uint64_t);
 
-EXPORT uint32_t spookyhash_32(const void *, size_t, uint32_t);
+SPOOKYHASH_WINDOWS_EXPORT uint32_t spookyhash_32(const void *, size_t, uint32_t);
 
-EXPORT void spookyhash_update(spookyhash_context *, const void *, size_t);
+SPOOKYHASH_WINDOWS_EXPORT void spookyhash_update(spookyhash_context *, const void *, size_t);
 
-EXPORT void spookyhash_final(spookyhash_context *, uint64_t *, uint64_t *);
+SPOOKYHASH_WINDOWS_EXPORT void spookyhash_final(spookyhash_context *, uint64_t *, uint64_t *);
 
 #endif

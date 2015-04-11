@@ -56,10 +56,10 @@ typedef struct {
     uint8_t m_remainder;
 } spookyhash_context;
 
-EXPORT spookyhash_context *spookyhash_context_allocate(void *(*)(size_t));
+SPOOKYHASH_WINDOWS_EXPORT spookyhash_context *spookyhash_context_allocate(void *(*)(size_t));
 
-EXPORT void spookyhash_context_free(spookyhash_context *, void (*)(void *));
+SPOOKYHASH_WINDOWS_EXPORT void spookyhash_context_free(spookyhash_context *, void (*)(void *));
 
-EXPORT void spookyhash_context_init(spookyhash_context *, uint64_t, uint64_t);
+SPOOKYHASH_WINDOWS_EXPORT void spookyhash_context_init(spookyhash_context *, uint64_t, uint64_t);
 
 #endif
