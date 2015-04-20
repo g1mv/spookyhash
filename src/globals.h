@@ -56,14 +56,13 @@
 #define SPOOKYHASH_WINDOWS_EXPORT
 #endif
 
-#if defined(__INTEL_COMPILER)
-#define SPOOKYHASH_FORCE_INLINE __forceinline
-#elif defined(_MSC_VER)
-#define SPOOKYHASH_FORCE_INLINE __forceinline
-#elif defined(__GNUC__)
-#define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
-#elif defined(__clang__)
-#define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
+#if defined(__clang__) || defined(__GNUC__)
+#define SPOOKYHASH_FORCE_INLINE    inline __attribute__((always_inline))
+#define SPOOKYHASH_MEMCPY     __builtin_memcpy
+#elif defined(_MSC_VER) || defined(__INTEL_COMPILER)
+#include <strings.h>
+#define SPOOKYHASH_FORCE_INLINE    __forceinline
+#define SPOOKYHASH_MEMCPY     memcpy
 #else
 #warning Impossible to force functions inlining. Expect performance issues.
 #endif
