@@ -21,6 +21,7 @@ Why use SpookyHash ?
 
 Quick start
 -----------
+```C
     #include "spookyhash.h"
 
     void hash(void* data, size_t data_length) {
