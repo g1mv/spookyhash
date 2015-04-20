@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
+find_program(CLANG_COMPILER clang)
+if(CLANG_COMPILER)
+    set(CMAKE_C_COMPILER ${CLANG_COMPILER})
+endif(CLANG_COMPILER)
+
 project(spookyhash)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Ofast -fomit-frame-pointer -flto -std=c99")
