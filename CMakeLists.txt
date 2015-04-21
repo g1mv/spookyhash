@@ -37,12 +37,15 @@ cmake_minimum_required(VERSION 2.8)
 find_program(CLANG_COMPILER clang)
 if(CLANG_COMPILER)
     set(CMAKE_C_COMPILER ${CLANG_COMPILER})
-endif(CLANG_COMPILER)
+endif()
 
 project(spookyhash)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Ofast -fomit-frame-pointer -flto -std=c99")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Ofast -fomit-frame-pointer -std=c99")
+if (NOT WIN32 OR NOT CLANG_COMPILER)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto")
 set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -flto")
+endif()
 
 add_library (
     spookyhash
