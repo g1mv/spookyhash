@@ -1,3 +1,10 @@
+1.0.5
+-----
+*April 21, 2015*
+
+* Switch to cmake for improved windows compatibility
+* Using builtin memory functions (memcpy, memset) when available
+
 1.0.4
 -----
 *April 3, 2015*
