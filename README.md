@@ -22,21 +22,21 @@ Why use SpookyHash ?
 Quick start
 -----------
 ```C
-    #include "spookyhash.h"
+#include "spookyhash.h"
 
-    void hash(void* data, size_t data_length) {
-        uint64_t c, d, seed1 = 1, seed2 = 2;
-        uint32_t seed32 = 3;
-        
-        // Direct use example
-        spookyhash_128(data, data_length, &c, &d);                          // c and d now contain the resulting 128-bit hash in two uint64_t parts
-        uint64_t hash64 = spookyhash_64(data, data_length, seed1);          // Produce 64-bit hash
-        uint32_t hash32 = spookyhash_32(data, data_length, seed32);         // Produce 32-bit hash
-        
-        // Stream use example
-        spookyhash_context* context = spookyhash_context_allocate(NULL);    // Create a context variable using malloc()
-        spookyhash_context_init(context, seed1, seed2);                     // Initialize the context
-        spookyhash_update(context, data, data_length);                      // Add data to hash, use this function repeatedly
-        spookyhash_final(context, &c, &d);                                  // c and d now contain the resulting 128-bit hash in two uint64_t parts
-        spookyhash_context_free(context, NULL);                             // Free the context from memory using free()
-    }
+void hash(void* data, size_t data_length) {
+    uint64_t c, d, seed1 = 1, seed2 = 2;
+    uint32_t seed32 = 3;
+    
+    // Direct use example
+    spookyhash_128(data, data_length, &c, &d);                          // c and d now contain the resulting 128-bit hash in two uint64_t parts
+    uint64_t hash64 = spookyhash_64(data, data_length, seed1);          // Produce 64-bit hash
+    uint32_t hash32 = spookyhash_32(data, data_length, seed32);         // Produce 32-bit hash
+    
+    // Stream use example
+    spookyhash_context* context = spookyhash_context_allocate(NULL);    // Create a context variable using malloc()
+    spookyhash_context_init(context, seed1, seed2);                     // Initialize the context
+    spookyhash_update(context, data, data_length);                      // Add data to hash, use this function repeatedly
+    spookyhash_final(context, &c, &d);                                  // c and d now contain the resulting 128-bit hash in two uint64_t parts
+    spookyhash_context_free(context, NULL);                             // Free the context from memory using free()
+}
