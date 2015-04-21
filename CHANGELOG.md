@@ -2,8 +2,8 @@
 -----
 *April 21, 2015*
 
-* Switch to cmake for improved windows compatibility
-* Using builtin memory functions (memcpy, memset) when available
+* Switched to cmake for improved windows compatibility
+* Now using builtin memory functions (memcpy, memset) when available
 
 1.0.4
 -----
