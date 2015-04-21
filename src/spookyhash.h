@@ -46,7 +46,6 @@
 #define SPOOKYHASH_H
 
 #include "context.h"
-#include <string.h>
 
 #define SPOOKYHASH_ALLOW_UNALIGNED_READS   1
 #define SPOOKYHASH_ROTATE(x, k) (((x) << (k)) | (((x) >> (64 - (k)))))

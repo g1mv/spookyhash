@@ -56,16 +56,21 @@
 #define SPOOKYHASH_WINDOWS_EXPORT
 #endif
 
-#if defined(__INTEL_COMPILER)
-#define SPOOKYHASH_FORCE_INLINE __forceinline
-#elif defined(_MSC_VER)
-#define SPOOKYHASH_FORCE_INLINE __forceinline
-#elif defined(__GNUC__)
+#if defined(__GNUC__) || defined(__clang__)
 #define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
-#elif defined(__clang__)
-#define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
+#elif defined(__INTEL_COMPILER) || defined(_MSC_VER)
+#define SPOOKYHASH_FORCE_INLINE __forceinline
 #else
 #warning Impossible to force functions inlining. Expect performance issues.
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#define SPOOKYHASH_MEMCPY   __builtin_memcpy
+#define SPOOKYHASH_MEMSET   __builtin_memset
+#else
+#include <string.h>
+#define SPOOKYHASH_MEMCPY   memcpy
+#define SPOOKYHASH_MEMSET   memset
 #endif
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
@@ -73,7 +78,7 @@
 #define SPOOKYHASH_LITTLE_ENDIAN_32(b)   ((uint32_t)b)
 #define SPOOKYHASH_LITTLE_ENDIAN_16(b)   ((uint16_t)b)
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-#if __GNUC__ * 100 + __GNUC_MINOR__ >= 403
+#if __GNUC__ * 100 + __GNUC_MINOR__ >= 403 || defined(__clang__)
 #define SPOOKYHASH_LITTLE_ENDIAN_64(b)   __builtin_bswap64(b)
 #define SPOOKYHASH_LITTLE_ENDIAN_32(b)   __builtin_bswap32(b)
 #define SPOOKYHASH_LITTLE_ENDIAN_16(b)   __builtin_bswap16(b)

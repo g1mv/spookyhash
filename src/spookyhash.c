@@ -134,7 +134,7 @@ SPOOKYHASH_FORCE_INLINE void spookyhash_short(const void *restrict message, size
 
 #if !SPOOKYHASH_ALLOW_UNALIGNED_READS
     if (u.i & 0x7) {
-        memcpy(buffer, message, length);
+        SPOOKYHASH_MEMCPY(buffer, message, length);
         u.p64 = buffer;
     }
 #endif
@@ -362,15 +362,15 @@ SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_128(const void
         }
     } else {
         while (u.p64 < end) {
-            memcpy(buf, u.p64, SPOOKYHASH_BLOCK_SIZE);
+            SPOOKYHASH_MEMCPY(buf, u.p64, SPOOKYHASH_BLOCK_SIZE);
             spookyhash_mix(buf, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
             u.p64 += SPOOKYHASH_VARIABLES;
         }
     }
 
     remainder = (length - ((const uint8_t *) end - (const uint8_t *) message));
-    memcpy(buf, end, remainder);
-    memset(((uint8_t *) buf) + remainder, 0, SPOOKYHASH_BLOCK_SIZE - remainder);
+    SPOOKYHASH_MEMCPY(buf, end, remainder);
+    SPOOKYHASH_MEMSET(((uint8_t *) buf) + remainder, 0, SPOOKYHASH_BLOCK_SIZE - remainder);
     ((uint8_t *) buf)[SPOOKYHASH_BLOCK_SIZE - 1] = (uint8_t) remainder;
 
     spookyhash_end(buf, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
@@ -402,7 +402,7 @@ SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyh
     const uint64_t *end;
 
     if (newLength < SPOOKYHASH_BUFFER_SIZE) {
-        memcpy(&((uint8_t *) context->m_data)[context->m_remainder], message, length);
+        SPOOKYHASH_MEMCPY(&((uint8_t *) context->m_data)[context->m_remainder], message, length);
         context->m_length = length + context->m_length;
         context->m_remainder = (uint8_t) newLength;
         return;
@@ -431,7 +431,7 @@ SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyh
 
     if (context->m_remainder) {
         uint8_t prefix = (uint8_t) (SPOOKYHASH_BUFFER_SIZE - context->m_remainder);
-        memcpy(&(((uint8_t *) context->m_data)[context->m_remainder]), message, prefix);
+        SPOOKYHASH_MEMCPY(&(((uint8_t *) context->m_data)[context->m_remainder]), message, prefix);
         u.p64 = context->m_data;
         spookyhash_mix(u.p64, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
         spookyhash_mix(&u.p64[SPOOKYHASH_VARIABLES], &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
@@ -451,14 +451,14 @@ SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_update(spookyh
     }
     else {
         while (u.p64 < end) {
-            memcpy(context->m_data, u.p8, SPOOKYHASH_BLOCK_SIZE);
+            SPOOKYHASH_MEMCPY(context->m_data, u.p8, SPOOKYHASH_BLOCK_SIZE);
             spookyhash_mix(context->m_data, &h0, &h1, &h2, &h3, &h4, &h5, &h6, &h7, &h8, &h9, &h10, &h11);
             u.p64 += SPOOKYHASH_VARIABLES;
         }
     }
 
     context->m_remainder = remainder;
-    memcpy(context->m_data, end, remainder);
+    SPOOKYHASH_MEMCPY(context->m_data, end, remainder);
 
     context->m_state[0] = h0;
     context->m_state[1] = h1;
@@ -504,7 +504,7 @@ SPOOKYHASH_WINDOWS_EXPORT SPOOKYHASH_FORCE_INLINE void spookyhash_final(spookyha
         remainder -= SPOOKYHASH_BLOCK_SIZE;
     }
 
-    memset(&((uint8_t *) data)[remainder], 0, (SPOOKYHASH_BLOCK_SIZE - remainder));
+    SPOOKYHASH_MEMSET(&((uint8_t *) data)[remainder], 0, (SPOOKYHASH_BLOCK_SIZE - remainder));
 
     ((uint8_t *) data)[SPOOKYHASH_BLOCK_SIZE - 1] = remainder;
 
