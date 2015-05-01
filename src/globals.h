@@ -51,7 +51,7 @@
 #include <stddef.h>
 
 #if defined(_WIN64) || defined(_WIN32)
-#define EXPORT __declspec(dllexport)
+#define SPOOKYHASH_WINDOWS_EXPORT __declspec(dllexport)
 #else
 #define SPOOKYHASH_WINDOWS_EXPORT
 #endif
