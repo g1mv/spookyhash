@@ -17,7 +17,6 @@ Why use SpookyHash ?
 * It can produce up to 128-bit results. Large systems should consider using 128-bit checksums nowadays. A library with 4 billion documents is expected to have about 1 colliding 64-bit checksum no matter how good the hash is. Libraries using 128-bit checksums should expect 1 collision once they hit 16 quintillion documents. (Due to limited hardware, I can only verify SpookyHash is as good as a good 73-bit checksum. It might be better, I can't tell.)
 * When NOT to use it: if you have an opponent. This is not cryptographic. Given a message, a resourceful opponent could write a tool that would produce a modified message with the same hash as the original message. Once such a tool is written, a not-so-resourceful opponent could borrow the tool and do the same thing.
 * Another case not to use it: CRCs have a nice property that you can split a message up into pieces arbitrarily, calculate the CRC all the pieces, then afterwards combine the CRCs for the pieces to find the CRC for the concatenation of all those pieces. SpookyHash can't. If you could deterministically choose what the pieces were, though, you could compute the hashes for pieces with SpookyHash (or CityHash or any other hash), then treat those hash values as the raw data, and do CRCs on top of that.
-* Machines that can't handle unaligned reads won't work by default, but there's a macro in the implementation to tweak that will let it deal with unaligned reads. x86-compatible machines support unaligned reads.
 
 Build
 -----
