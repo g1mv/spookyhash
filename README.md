@@ -21,7 +21,7 @@ Why use SpookyHash ?
 
 Build
 -----
-To build a static and dynamic library of CPUTime on Windows, Linux or Mac OSX,
+To build a static and dynamic library of SpookyHash on Windows, Linux or Mac OSX,
 
 1) Download [premake](http://premake.github.io/) and make it available in your path
 
