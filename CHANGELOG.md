@@ -1,3 +1,12 @@
+1.0.5
+-----
+*May 4, 2015*
+
+* Switched to premake as build system
+* Now using builtin memory functions (memcpy, memset) when available
+* Added a test executable pretty much identical to the original author's
+* Disabled unaligned reads by default to avoid undefined behaviors
+
 1.0.4
 -----
 *April 3, 2015*

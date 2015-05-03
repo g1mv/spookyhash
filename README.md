@@ -1,7 +1,7 @@
 SpookyHash
 ==========
 
-SpookyHash is a very fast non cryptographic hash function, designed by Bob Jenkins (http://burtleburtle.net/bob/hash/spooky.html).
+SpookyHash is a very fast non cryptographic hash function, [designed by Bob Jenkins](http://burtleburtle.net/bob/hash/spooky.html).
 
 It produces well-distributed 128-bit hash values for byte arrays of any length.
 It can produce 64-bit and 32-bit hash values too, at the same speed, just use the bottom n bits. Long keys hash in 3 bytes per cycle, short keys take about 1 byte per cycle, and there is a 30 cycle startup cost. Keys can be supplied in fragments.
@@ -17,25 +17,44 @@ Why use SpookyHash ?
 * It can produce up to 128-bit results. Large systems should consider using 128-bit checksums nowadays. A library with 4 billion documents is expected to have about 1 colliding 64-bit checksum no matter how good the hash is. Libraries using 128-bit checksums should expect 1 collision once they hit 16 quintillion documents. (Due to limited hardware, I can only verify SpookyHash is as good as a good 73-bit checksum. It might be better, I can't tell.)
 * When NOT to use it: if you have an opponent. This is not cryptographic. Given a message, a resourceful opponent could write a tool that would produce a modified message with the same hash as the original message. Once such a tool is written, a not-so-resourceful opponent could borrow the tool and do the same thing.
 * Another case not to use it: CRCs have a nice property that you can split a message up into pieces arbitrarily, calculate the CRC all the pieces, then afterwards combine the CRCs for the pieces to find the CRC for the concatenation of all those pieces. SpookyHash can't. If you could deterministically choose what the pieces were, though, you could compute the hashes for pieces with SpookyHash (or CityHash or any other hash), then treat those hash values as the raw data, and do CRCs on top of that.
-* Machines that can't handle unaligned reads won't work by default, but there's a macro in the implementation to tweak that will let it deal with unaligned reads. x86-compatible machines support unaligned reads.
+
+Build
+-----
+To build a static and dynamic library, as well as a test binary of SpookyHash on Windows, Linux or Mac OSX,
+
+1) Download [premake](http://premake.github.io/) and make it available in your path
+
+2) Run the following from the command line
+
+    cd build
+    premake4 gmake
+
+or alternatively, on windows for example :
+
+    premake4.exe vs2010
+    
+then :
+
+    make
 
 Quick start
 -----------
-    #include "spookyhash.h"
+```C
+#include "spookyhash.h"
 
-    void hash(void* data, size_t data_length) {
-        uint64_t c, d, seed1 = 1, seed2 = 2;
-        uint32_t seed32 = 3;
-        
-        // Direct use example
-        spookyhash_128(data, data_length, &c, &d);                          // c and d now contain the resulting 128-bit hash in two uint64_t parts
-        uint64_t hash64 = spookyhash_64(data, data_length, seed1);          // Produce 64-bit hash
-        uint32_t hash32 = spookyhash_32(data, data_length, seed32);         // Produce 32-bit hash
-        
-        // Stream use example
-        spookyhash_context* context = spookyhash_context_allocate(NULL);    // Create a context variable using malloc()
-        spookyhash_context_init(context, seed1, seed2);                     // Initialize the context
-        spookyhash_update(context, data, data_length);                      // Add data to hash, use this function repeatedly
-        spookyhash_final(context, &c, &d);                                  // c and d now contain the resulting 128-bit hash in two uint64_t parts
-        spookyhash_context_free(context, NULL);                             // Free the context from memory using free()
-    }
+void hash(void* data, size_t data_length) {
+    uint64_t c, d, seed1 = 1, seed2 = 2;
+    uint32_t seed32 = 3;
+    
+    // Direct use example
+    spookyhash_128(data, data_length, &c, &d);                          // c and d now contain the resulting 128-bit hash in two uint64_t parts
+    uint64_t hash64 = spookyhash_64(data, data_length, seed1);          // Produce 64-bit hash
+    uint32_t hash32 = spookyhash_32(data, data_length, seed32);         // Produce 32-bit hash
+    
+    // Stream use example
+    spookyhash_context* context = spookyhash_context_allocate(NULL);    // Create a context variable using malloc()
+    spookyhash_context_init(context, seed1, seed2);                     // Initialize the context
+    spookyhash_update(context, data, data_length);                      // Add data to hash, use this function repeatedly
+    spookyhash_final(context, &c, &d);                                  // c and d now contain the resulting 128-bit hash in two uint64_t parts
+    spookyhash_context_free(context, NULL);                             // Free the context from memory using free()
+}

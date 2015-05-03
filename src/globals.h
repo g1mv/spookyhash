@@ -51,20 +51,30 @@
 #include <stddef.h>
 
 #if defined(_WIN64) || defined(_WIN32)
-#define EXPORT __declspec(dllexport)
+#define SPOOKYHASH_WINDOWS_EXPORT __declspec(dllexport)
 #else
 #define SPOOKYHASH_WINDOWS_EXPORT
 #endif
 
-#if defined(__clang__) || defined(__GNUC__)
-#define SPOOKYHASH_FORCE_INLINE    inline __attribute__((always_inline))
-#define SPOOKYHASH_MEMCPY     __builtin_memcpy
-#elif defined(_MSC_VER) || defined(__INTEL_COMPILER)
-#include <strings.h>
-#define SPOOKYHASH_FORCE_INLINE    __forceinline
-#define SPOOKYHASH_MEMCPY     memcpy
+#if defined(__GNUC__) || defined(__clang__)
+#define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
+#define SPOOKYHASH_RESTRICT     restrict
+#elif defined(__INTEL_COMPILER) || defined(_MSC_VER)
+#define SPOOKYHASH_FORCE_INLINE __forceinline
+#define SPOOKYHASH_RESTRICT     __restrict
 #else
 #warning Impossible to force functions inlining. Expect performance issues.
+#define SPOOKYHASH_FORCE_INLINE
+#define SPOOKYHASH_RESTRICT
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#define SPOOKYHASH_MEMCPY   __builtin_memcpy
+#define SPOOKYHASH_MEMSET   __builtin_memset
+#else
+#include <string.h>
+#define SPOOKYHASH_MEMCPY   memcpy
+#define SPOOKYHASH_MEMSET   memset
 #endif
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
@@ -72,7 +82,7 @@
 #define SPOOKYHASH_LITTLE_ENDIAN_32(b)   ((uint32_t)b)
 #define SPOOKYHASH_LITTLE_ENDIAN_16(b)   ((uint16_t)b)
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-#if __GNUC__ * 100 + __GNUC_MINOR__ >= 403
+#if __GNUC__ * 100 + __GNUC_MINOR__ >= 403 || defined(__clang__)
 #define SPOOKYHASH_LITTLE_ENDIAN_64(b)   __builtin_bswap64(b)
 #define SPOOKYHASH_LITTLE_ENDIAN_32(b)   __builtin_bswap32(b)
 #define SPOOKYHASH_LITTLE_ENDIAN_16(b)   __builtin_bswap16(b)
@@ -88,6 +98,6 @@
 
 #define SPOOKYHASH_MAJOR_VERSION   1
 #define SPOOKYHASH_MINOR_VERSION   0
-#define SPOOKYHASH_REVISION        3
+#define SPOOKYHASH_REVISION        5
 
 #endif
