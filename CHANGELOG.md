@@ -1,8 +1,8 @@
 1.0.5
 -----
-*April 21, 2015*
+*May 3, 2015*
 
-* Switched to cmake for improved windows compatibility
+* Switched to premake as build system
 * Now using builtin memory functions (memcpy, memset) when available
 
 1.0.4

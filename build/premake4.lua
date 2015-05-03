@@ -55,3 +55,13 @@ solution "SpookyHash"
 			"../src/*.h",
 			"../src/*.c"
 		}
+
+	project "spookyhash-test"
+		targetname ("test")
+		kind "ConsoleApp"
+		language "C"
+		files {
+			"../test/src/**.h",
+			"../test/src/**.c"
+		}
+		links { "spookyhash-static" }
