@@ -19,6 +19,25 @@ Why use SpookyHash ?
 * Another case not to use it: CRCs have a nice property that you can split a message up into pieces arbitrarily, calculate the CRC all the pieces, then afterwards combine the CRCs for the pieces to find the CRC for the concatenation of all those pieces. SpookyHash can't. If you could deterministically choose what the pieces were, though, you could compute the hashes for pieces with SpookyHash (or CityHash or any other hash), then treat those hash values as the raw data, and do CRCs on top of that.
 * Machines that can't handle unaligned reads won't work by default, but there's a macro in the implementation to tweak that will let it deal with unaligned reads. x86-compatible machines support unaligned reads.
 
+Build
+-----
+To build a static and dynamic library of CPUTime on Windows, Linux or Mac OSX,
+
+1) Download [premake](http://premake.github.io/) and make it available in your path
+
+2) Run the following from the command line
+
+    cd build
+    premake4 gmake
+
+or alternatively, on windows for example :
+
+    premake4.exe vs2010
+    
+then :
+
+    make
+
 Quick start
 -----------
 ```C
