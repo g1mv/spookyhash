@@ -65,7 +65,6 @@ solution "SpookyHash"
 		}
 
 	project "spookyhash-test"
-		targetname ("test")
 		kind "ConsoleApp"
 		language "C"
 		files {

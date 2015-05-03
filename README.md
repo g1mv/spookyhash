@@ -1,7 +1,7 @@
 SpookyHash
 ==========
 
-SpookyHash is a very fast non cryptographic hash function, designed by Bob Jenkins (http://burtleburtle.net/bob/hash/spooky.html).
+SpookyHash is a very fast non cryptographic hash function, [designed by Bob Jenkins](http://burtleburtle.net/bob/hash/spooky.html).
 
 It produces well-distributed 128-bit hash values for byte arrays of any length.
 It can produce 64-bit and 32-bit hash values too, at the same speed, just use the bottom n bits. Long keys hash in 3 bytes per cycle, short keys take about 1 byte per cycle, and there is a 30 cycle startup cost. Keys can be supplied in fragments.

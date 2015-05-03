@@ -47,7 +47,7 @@
 
 #include "context.h"
 
-#define SPOOKYHASH_ALLOW_UNALIGNED_READS   1
+#define SPOOKYHASH_ALLOW_UNALIGNED_READS   0
 #define SPOOKYHASH_ROTATE(x, k) (((x) << (k)) | (((x) >> (64 - (k)))))
 
 SPOOKYHASH_WINDOWS_EXPORT void spookyhash_128(const void *, size_t, uint64_t *, uint64_t *);
