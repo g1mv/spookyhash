@@ -30,7 +30,6 @@
  * Very fast non cryptographic hash
  */
 
-#include <sys/time.h>
 #include <string.h>
 #include "../../src/spookyhash.h"
 #include "cputime/src/cputime.h"
