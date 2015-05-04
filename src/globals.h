@@ -52,16 +52,16 @@
 
 #if defined(_WIN64) || defined(_WIN32)
 #define SPOOKYHASH_WINDOWS_EXPORT __declspec(dllexport)
+#define SPOOKYHASH_RESTRICT     __restrict
 #else
 #define SPOOKYHASH_WINDOWS_EXPORT
+#define SPOOKYHASH_RESTRICT     restrict
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
 #define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
-#define SPOOKYHASH_RESTRICT     restrict
 #elif defined(__INTEL_COMPILER) || defined(_MSC_VER)
 #define SPOOKYHASH_FORCE_INLINE __forceinline
-#define SPOOKYHASH_RESTRICT     __restrict
 #else
 #warning Impossible to force functions inlining. Expect performance issues.
 #define SPOOKYHASH_FORCE_INLINE

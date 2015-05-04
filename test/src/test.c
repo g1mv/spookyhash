@@ -51,7 +51,8 @@ uint64_t test_value() {
 void test_init(uint64_t seed) {
     m_a = 0xdeadbeef;
     m_b = m_c = m_d = seed;
-    for (int i = 0; i < 20; ++i)
+    int i;
+    for (i = 0; i < 20; ++i)
         (void) test_value();
 }
 
@@ -90,7 +91,8 @@ void test_results() {
 
     uint_fast8_t buf[BUFSIZE];
     uint32_t saw[BUFSIZE];
-    for (uint16_t i = 0; i < BUFSIZE; ++i) {
+    uint16_t i;
+    for (i = 0; i < BUFSIZE; ++i) {
         buf[i] = i + 128;
         saw[i] = spookyhash_32(buf, i, 0);
         if (saw[i] != expected[i]) {
@@ -109,7 +111,8 @@ void do_timing_big(int seed) {
     printf("\ntesting time to hash 2^^30 bytes ...\n");
 
     char *buf[NUMBUF];
-    for (int i = 0; i < NUMBUF; ++i) {
+    int i;
+    for (i = 0; i < NUMBUF; ++i) {
         buf[i] = (char *) malloc(BUFSIZE);
         memset(buf[i], (char) seed, BUFSIZE);
     }
@@ -118,30 +121,30 @@ void do_timing_big(int seed) {
     cputime_chronometer_start(&chrono);
     uint64_t hash1 = seed;
     uint64_t hash2 = seed;
-    for (uint64_t i = 0; i < NUMBUF; ++i) {
+    for (i = 0; i < NUMBUF; ++i) {
         spookyhash_128(buf[i], BUFSIZE, &hash1, &hash2);
     }
     printf("SpookyHash::Hash128, uncached: time is %fs\n", cputime_chronometer_stop(&chrono));
 
     cputime_chronometer_start(&chrono);
-    for (uint64_t i = 0; i < NUMBUF; ++i) {
+    for (i = 0; i < NUMBUF; ++i) {
         test_add(buf[i], BUFSIZE, &hash1, &hash2);
     }
     printf("Addition           , uncached: time is %fs\n", cputime_chronometer_stop(&chrono));
 
     cputime_chronometer_start(&chrono);
-    for (uint64_t i = 0; i < NUMBUF * BUFSIZE / 1024; ++i) {
+    for (i = 0; i < NUMBUF * BUFSIZE / 1024; ++i) {
         spookyhash_128(buf[0], 1024, &hash1, &hash2);
     }
     printf("SpookyHash::Hash128,   cached: time is %fs\n", cputime_chronometer_stop(&chrono));
 
     cputime_chronometer_start(&chrono);
-    for (uint64_t i = 0; i < NUMBUF * BUFSIZE / 1024; ++i) {
+    for (i = 0; i < NUMBUF * BUFSIZE / 1024; ++i) {
         test_add(buf[0], 1024, &hash1, &hash2);
     }
     printf("Addition           ,   cached: time is %fs\n", cputime_chronometer_stop(&chrono));
 
-    for (int i = 0; i < NUMBUF; ++i) {
+    for (i = 0; i < NUMBUF; ++i) {
         free(buf[i]);
         buf[i] = 0;
     }
@@ -158,15 +161,17 @@ void do_timing_small(int seed) {
     printf("\ntesting timing of hashing up to %d cached aligned bytes %d times ...\n", BUFSIZE, NUMITER);
 
     uint64_t buf[BUFSIZE / 8];
-    for (int i = 0; i < BUFSIZE / 8; ++i) {
+    int i;
+    for (i = 0; i < BUFSIZE / 8; ++i) {
         buf[i] = i + seed;
     }
     cputime_chronometer chrono;
-    for (int i = 1; i <= BUFSIZE; i <<= 1) {
+    for (i = 1; i <= BUFSIZE; i <<= 1) {
         cputime_chronometer_start(&chrono);
         uint64_t hash1 = seed;
         uint64_t hash2 = seed + i;
-        for (int j = 0; j < NUMITER; ++j) {
+        int j;
+        for (j = 0; j < NUMITER; ++j) {
             spookyhash_128((char *) buf, i, &hash1, &hash2);
         }
         printf("%d bytes: hash is %.16llx %.16llx, time is %fs\n", i, hash1, hash2, cputime_chronometer_stop(&chrono));
@@ -182,16 +187,19 @@ void test_alignment() {
 
     char buf[BUFSIZE];
     uint64_t hash[8];
-    for (int i = 0; i < BUFSIZE - 16; ++i) {
-        for (int j = 0; j < 8; ++j) {
+    int i;
+    for (i = 0; i < BUFSIZE - 16; ++i) {
+        int j;
+        for (j = 0; j < 8; ++j) {
             buf[j] = (char) i + j;
-            for (int k = 1; k <= i; ++k) {
+            int k;
+            for (k = 1; k <= i; ++k) {
                 buf[j + k] = k;
             }
             buf[j + i + 1] = (char) i + j;
             hash[j] = spookyhash_64((const void *) (buf + j + 1), i, 0);
         }
-        for (int j = 1; j < 8; ++j) {
+        for (j = 1; j < 8; ++j) {
             if (hash[0] != hash[j]) {
                 printf("alignment problems: %d %d\n", i, j);
             }
@@ -209,20 +217,24 @@ void test_alignment() {
 void test_deltas(int seed) {
     printf("\nall 1 or 2 bit input deltas get %d tries to flip every output bit ...\n", TRIES);
 
-    //Random random;
-    /*random.*/test_init((uint64_t) seed);
+    test_init((uint64_t) seed);
 
     // for messages 0..BUFSIZE-1 bytes
-    for (int h = 0; h < BUFSIZE; ++h) {
+    int h;
+    for (h = 0; h < BUFSIZE; ++h) {
         int maxk = 0;
         // first bit to set
-        for (int i = 0; i < h * 8; ++i) {
+        int i;
+        for (i = 0; i < h * 8; ++i) {
             // second bit to set, or don't have a second bit
-            for (int j = 0; j <= i; ++j) {
+            int j;
+            for (j = 0; j <= i; ++j) {
                 uint64_t measure[MEASURES][2];
                 uint64_t counter[MEASURES][2];
-                for (int l = 0; l < 2; ++l) {
-                    for (int m = 0; m < MEASURES; ++m) {
+                int l;
+                for (l = 0; l < 2; ++l) {
+                    int m;
+                    for (m = 0; m < MEASURES; ++m) {
                         counter[m][l] = 0;
                     }
                 }
@@ -233,7 +245,8 @@ void test_deltas(int seed) {
                     uint_fast8_t buf1[BUFSIZE];
                     uint_fast8_t buf2[BUFSIZE];
                     int done = 1;
-                    for (int l = 0; l < h; ++l) {
+                    int l;
+                    for (l = 0; l < h; ++l) {
                         buf1[l] = buf2[l] = test_value();
                     }
                     buf1[i / 8] ^= (1 << (i % 8));
@@ -242,7 +255,7 @@ void test_deltas(int seed) {
                     }
                     spookyhash_128(buf1, h, &measure[0][0], &measure[0][1]);
                     spookyhash_128(buf2, h, &measure[1][0], &measure[1][1]);
-                    for (int l = 0; l < 2; ++l) {
+                    for (l = 0; l < 2; ++l) {
                         measure[2][l] = measure[0][l] ^ measure[1][l];
                         measure[3][l] = ~(measure[0][l] ^ measure[1][l]);
                         measure[4][l] = measure[0][l] - measure[1][l];
@@ -250,8 +263,9 @@ void test_deltas(int seed) {
                         measure[5][l] = measure[0][l] + measure[1][l];
                         measure[5][l] ^= (measure[4][l] >> 1);
                     }
-                    for (int l = 0; l < 2; ++l) {
-                        for (int m = 0; m < MEASURES; ++m) {
+                    for (l = 0; l < 2; ++l) {
+                        int m;
+                        for (m = 0; m < MEASURES; ++m) {
                             counter[m][l] |= measure[m][l];
                             if (~counter[m][l]) done = 0;
                         }
@@ -279,10 +293,11 @@ void test_deltas(int seed) {
 void test_pieces() {
     printf("\ntesting pieces ...\n");
     char buf[BUFSIZE];
-    for (int i = 0; i < BUFSIZE; ++i) {
+    int i;
+    for (i = 0; i < BUFSIZE; ++i) {
         buf[i] = i;
     }
-    for (int i = 0; i < BUFSIZE; ++i) {
+    for (i = 0; i < BUFSIZE; ++i) {
         uint64_t a, b, c, d, seed1 = 1, seed2 = 2;
         //SpookyHash state;
         spookyhash_context *context = spookyhash_context_allocate(NULL);
@@ -307,7 +322,8 @@ void test_pieces() {
         }
 
         // all possible two consecutive pieces
-        for (int j = 0; j < i; ++j) {
+        int j;
+        for (j = 0; j < i; ++j) {
             c = seed1;
             d = seed2;
             spookyhash_context_init(context, c, d);
