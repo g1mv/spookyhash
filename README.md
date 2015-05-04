@@ -28,14 +28,11 @@ To build a static and dynamic library, as well as a test binary of SpookyHash on
 
     cd build
     premake4 gmake
+    make
 
 or alternatively, on windows for example :
 
     premake4.exe vs2010
-    
-then :
-
-    make
 
 Quick start
 -----------
