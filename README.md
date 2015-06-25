@@ -22,22 +22,22 @@ Build
 -----
 To build a static and dynamic library, as well as a test binary of SpookyHash on Windows, Linux or Mac OSX,
 
-1) Download [premake](http://premake.github.io/) and make it available in your path
+1) Download [premake 5](http://premake.github.io/) and make it available in your path
 
 2) Run the following from the command line
 
     cd build
-    premake4 gmake
+    premake5 gmake
     make
 
 or alternatively, on windows for example :
 
-    premake4.exe vs2010
+    premake5.exe vs2010
 
 Quick start
 -----------
 ```C
-#include "spookyhash.h"
+#include "spookyhash_api.h"
 
 void hash(void* data, size_t data_length) {
     uint64_t c, d, seed1 = 1, seed2 = 2;
@@ -49,9 +49,8 @@ void hash(void* data, size_t data_length) {
     uint32_t hash32 = spookyhash_32(data, data_length, seed32);         // Produce 32-bit hash
     
     // Stream use example
-    spookyhash_context* context = spookyhash_context_allocate(NULL);    // Create a context variable using malloc()
-    spookyhash_context_init(context, seed1, seed2);                     // Initialize the context
-    spookyhash_update(context, data, data_length);                      // Add data to hash, use this function repeatedly
-    spookyhash_final(context, &c, &d);                                  // c and d now contain the resulting 128-bit hash in two uint64_t parts
-    spookyhash_context_free(context, NULL);                             // Free the context from memory using free()
+    spookyhash_context context;                                         // Create a context variable
+    spookyhash_context_init(&context, seed1, seed2);                    // Initialize the context
+    spookyhash_update(&context, data, data_length);                     // Add data to hash, use this function repeatedly
+    spookyhash_final(&context, &c, &d);                                 // c and d now contain the resulting 128-bit hash in two uint64_t parts
 }

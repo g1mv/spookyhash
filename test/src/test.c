@@ -31,6 +31,7 @@
  */
 
 #include <string.h>
+#include "../../src/spookyhash_api.h"
 #include "../../src/spookyhash.h"
 #include "cputime/src/cputime.h"
 
@@ -300,7 +301,7 @@ void test_pieces() {
     for (i = 0; i < BUFSIZE; ++i) {
         uint64_t a, b, c, d, seed1 = 1, seed2 = 2;
         //SpookyHash state;
-        spookyhash_context *context = spookyhash_context_allocate(NULL);
+        spookyhash_context context;
 
         // all as one call
         a = seed1;
@@ -310,9 +311,9 @@ void test_pieces() {
         // all as one piece
         c = 0xdeadbeefdeadbeef;
         d = 0xbaceba11baceba11;
-        spookyhash_context_init(context, seed1, seed2);
-        spookyhash_update(context, buf, i);
-        spookyhash_final(context, &c, &d);
+        spookyhash_context_init(&context, seed1, seed2);
+        spookyhash_update(&context, buf, i);
+        spookyhash_final(&context, &c, &d);
 
         if (a != c) {
             printf("wrong a %d: %.16llx %.16llx\n", i, a, c);
@@ -326,10 +327,10 @@ void test_pieces() {
         for (j = 0; j < i; ++j) {
             c = seed1;
             d = seed2;
-            spookyhash_context_init(context, c, d);
-            spookyhash_update(context, &buf[0], j);
-            spookyhash_update(context, &buf[j], i - j);
-            spookyhash_final(context, &c, &d);
+            spookyhash_context_init(&context, c, d);
+            spookyhash_update(&context, &buf[0], j);
+            spookyhash_update(&context, &buf[j], i - j);
+            spookyhash_final(&context, &c, &d);
             if (a != c) {
                 printf("wrong a %d %d: %.16llx %.16llx\n", j, i, a, c);
             }

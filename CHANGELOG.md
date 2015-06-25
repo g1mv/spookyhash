@@ -1,3 +1,11 @@
+1.0.6
+-----
+*June 26, 2015*
+
+* Switched to premake 5
+* Updated API definitions
+* Added version information access in the API
+
 1.0.5
 -----
 *May 4, 2015*

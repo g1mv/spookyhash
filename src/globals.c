@@ -29,7 +29,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * 24/01/15 22:32
+ * 26/06/15 1:08
  *
  * ----------
  * SpookyHash
@@ -42,15 +42,16 @@
  * Very fast non cryptographic hash
  */
 
-#ifndef SPOOKYHASH_CONTEXT_H
-#define SPOOKYHASH_CONTEXT_H
-
 #include "globals.h"
 
-#define SPOOKYHASH_BLOCK_SIZE (SPOOKYHASH_VARIABLES * 8)
-#define SPOOKYHASH_BUFFER_SIZE (2 * SPOOKYHASH_BLOCK_SIZE)
-#define SPOOKYHASH_CONSTANT (0xdeadbeefdeadbeefLL)
+SPOOKYHASH_WINDOWS_EXPORT uint8_t spookyhash_version_major() {
+    return SPOOKYHASH_MAJOR_VERSION;
+}
 
-SPOOKYHASH_WINDOWS_EXPORT void spookyhash_context_init(spookyhash_context *, uint64_t, uint64_t);
+SPOOKYHASH_WINDOWS_EXPORT uint8_t spookyhash_version_minor() {
+    return SPOOKYHASH_MINOR_VERSION;
+}
 
-#endif
+SPOOKYHASH_WINDOWS_EXPORT uint8_t spookyhash_version_revision() {
+    return SPOOKYHASH_REVISION;
+}

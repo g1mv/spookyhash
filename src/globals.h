@@ -45,23 +45,17 @@
 #ifndef SPOOKYHASH_GLOBALS_H
 #define SPOOKYHASH_GLOBALS_H
 
-#include <stdint.h>
+#include "spookyhash_api.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
-
-#if defined(_WIN64) || defined(_WIN32)
-#define SPOOKYHASH_WINDOWS_EXPORT __declspec(dllexport)
-#define SPOOKYHASH_RESTRICT     __restrict
-#else
-#define SPOOKYHASH_WINDOWS_EXPORT
-#define SPOOKYHASH_RESTRICT     restrict
-#endif
 
 #if defined(__GNUC__) || defined(__clang__)
 #define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))
+#define SPOOKYHASH_RESTRICT     restrict
 #elif defined(__INTEL_COMPILER) || defined(_MSC_VER)
 #define SPOOKYHASH_FORCE_INLINE __forceinline
+#define SPOOKYHASH_RESTRICT     __restrict
 #else
 #warning Impossible to force functions inlining. Expect performance issues.
 #define SPOOKYHASH_FORCE_INLINE
@@ -98,6 +92,6 @@
 
 #define SPOOKYHASH_MAJOR_VERSION   1
 #define SPOOKYHASH_MINOR_VERSION   0
-#define SPOOKYHASH_REVISION        5
+#define SPOOKYHASH_REVISION        6
 
 #endif
