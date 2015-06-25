@@ -7,7 +7,7 @@ before_install:
   - sudo apt-get -qq --yes install premake5
   
 before_script:
-  - premake5 gmake
+  - cd build && premake5 gmake
 
 script:
   - make
