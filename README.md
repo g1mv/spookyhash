@@ -22,17 +22,17 @@ Build
 -----
 To build a static and dynamic library, as well as a test binary of SpookyHash on Windows, Linux or Mac OSX,
 
-1) Download [premake](http://premake.github.io/) and make it available in your path
+1) Download [premake 5](http://premake.github.io/) and make it available in your path
 
 2) Run the following from the command line
 
     cd build
-    premake4 gmake
+    premake5 gmake
     make
 
 or alternatively, on windows for example :
 
-    premake4.exe vs2010
+    premake5.exe vs2010
 
 Quick start
 -----------

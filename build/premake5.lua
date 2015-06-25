@@ -44,7 +44,7 @@ os.execute("git submodule update --init --recursive")
 
 solution "SpookyHash"
 	configurations { "Release" }
-	flags { "OptimizeSpeed", "NoFramePointer" }
+	flags { "OptimizeSpeed", "NoFramePointer", "LinkTimeOptimization" }
 
 	project "spookyhash-static"
 		targetname ("spookyhash")
