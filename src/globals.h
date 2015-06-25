@@ -45,16 +45,10 @@
 #ifndef SPOOKYHASH_GLOBALS_H
 #define SPOOKYHASH_GLOBALS_H
 
-#include <stdint.h>
+#include "spookyhash_api.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
-
-#if defined(_WIN64) || defined(_WIN32)
-#define SPOOKYHASH_WINDOWS_EXPORT __declspec(dllexport)
-#else
-#define SPOOKYHASH_WINDOWS_EXPORT
-#endif
 
 #if defined(__GNUC__) || defined(__clang__)
 #define SPOOKYHASH_FORCE_INLINE inline __attribute__((always_inline))

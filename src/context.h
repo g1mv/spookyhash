@@ -47,21 +47,9 @@
 
 #include "globals.h"
 
-#define SPOOKYHASH_VARIABLES (12)
 #define SPOOKYHASH_BLOCK_SIZE (SPOOKYHASH_VARIABLES * 8)
 #define SPOOKYHASH_BUFFER_SIZE (2 * SPOOKYHASH_BLOCK_SIZE)
 #define SPOOKYHASH_CONSTANT (0xdeadbeefdeadbeefLL)
-
-typedef struct {
-    uint64_t m_data[2 * SPOOKYHASH_VARIABLES];
-    uint64_t m_state[SPOOKYHASH_VARIABLES];
-    size_t m_length;
-    uint8_t m_remainder;
-} spookyhash_context;
-
-SPOOKYHASH_WINDOWS_EXPORT spookyhash_context *spookyhash_context_allocate(void *(*)(size_t));
-
-SPOOKYHASH_WINDOWS_EXPORT void spookyhash_context_free(spookyhash_context *, void (*)(void *));
 
 SPOOKYHASH_WINDOWS_EXPORT void spookyhash_context_init(spookyhash_context *, uint64_t, uint64_t);
 
