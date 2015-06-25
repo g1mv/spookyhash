@@ -92,6 +92,6 @@
 
 #define SPOOKYHASH_MAJOR_VERSION   1
 #define SPOOKYHASH_MINOR_VERSION   0
-#define SPOOKYHASH_REVISION        5
+#define SPOOKYHASH_REVISION        6
 
 #endif
