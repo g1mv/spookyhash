@@ -5,14 +5,8 @@ install:
   - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-windows.zip -OutFile premake5.zip
   - 7z x premake5.zip
   - del premake5.zip
-  - ps: wget http://www.mirrorservice.org/sites/downloads.sourceforge.net/g/gn/gnuwin32/make/3.81/make-3.81-bin.zip -OutFile make.zip
-  - 7z x make.zip
-  - dir
-  - del make.zip
 
 build_script:
-  - premake5 gmake
-  - set PATH=C:\MinGW\bin;C:\projects\spookyhash\build\bin\;%PATH%
-  - make clean
-  - make
+  - premake5 vs2013
+  - msbuild SpookyHash.sln
   - spookyhash-test
