@@ -1,13 +1,13 @@
 version: 1.0.6.{build}
 
 install:
-  - cmd: cd build
+  - cd build
   - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-windows.zip -OutFile premake5.zip
-  - cmd: 7z x premake5.zip
-  - cmd: del premake5.zip
+  - 7z x premake5.zip
+  - del premake5.zip
 
 build_script:
-  - cmd: premake5 gmake
-  - cmd: c:\MinGW\bin\mingw32-make --version
-  - cmd: c:\MinGW\bin\mingw32-make
-  - cmd: spookyhash-test
+  - premake5 gmake
+  - SET PATH=C:\MinGW\bin;%PATH%
+  - mingw32-make --version
+  - spookyhash-test
