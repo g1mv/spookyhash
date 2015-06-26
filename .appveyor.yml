@@ -8,7 +8,7 @@ install:
 
 build_script:
   - premake5 gmake
-  - SET PATH=C:\MinGW\bin;%PATH%
-  - mingw32-make clean
-  - mingw32-make
+  - set PATH=C:\MinGW\bin;%PATH%
+  - ps: mingw32-make clean
+  - ps: mingw32-make
   - spookyhash-test
