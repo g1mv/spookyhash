@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 1.0.6.{build}
 
 install:
   - cmd: cd build
