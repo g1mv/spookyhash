@@ -3,11 +3,17 @@ version: 1.0.6.{build}
 install:
   - cmd: cd build
   - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-windows.zip -OutFile premake5.zip
-  - cmd: dir
   - cmd: 7z x premake5.zip
   - cmd: del premake5.zip
+  - cmd: premake5 --version
+  - ps: wget http://downloads.sourceforge.net/project/gnuwin32/make/3.81/make-3.81-bin.zip?r=http%3A%2F%2Fgnuwin32.sourceforge.net%2Fpackages%2Fmake.htm&ts=1435329768&use_mirror=heanet -OutFile make.zip
+  - cmd: 7z x make.zip
+  - cmd: del make.zip
+  - cmd: cp make-3.81-bin/bin/make.exe .
+  - cmd: make --version
+
 
 build_script:
-  - cmd: premake5 vs2010
-  - cmd: dir
-  - cmd: msbuild SpookyHash.sln
+  - cmd: premake5 gmake
+  - cmd: make clean
+  - cmd: make
