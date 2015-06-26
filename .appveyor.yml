@@ -9,4 +9,3 @@ install:
 build_script:
   - premake5 vs2013
   - msbuild SpookyHash.sln
-  - spookyhash-test
