@@ -5,9 +5,9 @@ install:
   - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-windows.zip -OutFile premake5.zip
   - 7z x premake5.zip
   - del premake5.zip
-  - ps: wget ftp://ftp.mirrorservice.org/sites/downloads.sourceforge.net/g/gn/gnuwin32/make/3.81/make-3.81-bin.zip
-  - cmd: 7z x make-3.81-bin.zip
-  - cmd: del make-3.81-bin.zip
+  - wget ftp://ftp.mirrorservice.org/sites/downloads.sourceforge.net/g/gn/gnuwin32/make/3.81/make-3.81-bin.zip
+  - 7z x make-3.81-bin.zip
+  - del make-3.81-bin.zip
 
 build_script:
   - premake5 gmake
