@@ -37,7 +37,7 @@ To build a static and dynamic library, as well as a test binary of SpookyHash on
 
 or alternatively, on windows for example :
 
-    premake5.exe vs2010
+    premake5.exe vs2013
 
 Quick start
 -----------
