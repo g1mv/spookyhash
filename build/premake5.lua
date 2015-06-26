@@ -69,7 +69,9 @@ solution "SpookyHash"
 		kind "ConsoleApp"
 		language "C"
 		files {
-			"../test/src/**.h",
-			"../test/src/**.c"
+			"../test/libs/**.h",
+			"../test/libs/**.c",
+			"../test/src/*.h",
+			"../test/src/*.c"
 		}
 		links { "spookyhash-static" }
