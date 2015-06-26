@@ -8,6 +8,8 @@ install:
 
 build_script:
   - cmd: premake5 gmake
-  - cmd: mingw32-make clean
-  - cmd: mingw32-make
+  - cmd: dir c:/MinGW/
+  - cmd: dir c:/MinGW/bin/
+  - cmd: c:/MinGW/bin/mingw32-make clean
+  - cmd: c:/MinGW/bin/mingw32-make
   - cmd: spookyhash-test
