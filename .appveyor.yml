@@ -5,13 +5,12 @@ install:
   - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-windows.zip -OutFile premake5.zip
   - cmd: 7z x premake5.zip
   - cmd: del premake5.zip
-  - ps: wget http://downloads.sourceforge.net/project/gnuwin32/make/3.81/make-3.81-bin.zip
-  - cmd: 7z x make-3.81-bin.zip
-  - cmd: del make-3.81-bin.zip
-  - cmd: cp make-3.81-bin/bin/make.exe .
+  - ps: wget https://olex-secure.openlogic.com/content/openlogic/gnumake/3.81/gnumake-3.81-windows-bin.zip --no-check-certificate
+  - cmd: 7z x gnumake-3.81-windows-bin.zip
+  - cmd: del gnumake-3.81-windows-bin.zip
 
 build_script:
   - cmd: premake5 gmake
-  - cmd: make clean
-  - cmd: make
+  - cmd: gnumake-3.81/make clean
+  - cmd: gnumake-3.81/make
   - cmd: spookyhash-test
