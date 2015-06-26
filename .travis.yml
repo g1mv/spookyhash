@@ -1,17 +1,10 @@
 language: c
 
-# compiler:
-#   - clang
-#   - gcc
-  
-# before_install:
-#   - sudo apt-get -qq --yes install premake5
-  
-# before_script:
-#   - cd build && premake5 gmake
-
 script:
-  - cd src
-  - gcc -std=c99 *.c ../test/src/*.c ../test/src/cputime/src/*.c
-  - clang *.c ../test/src/*.c ../test/src/cputime/src/*.c
-  - rm a.out
+  - cd build
+  - wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-linux.tar.gz
+  - tar zxvf premake-5.0.0.alpha4-linux.tar.gz
+  - ln -sf premake-5.0.0.alpha4-linux/premake5 premake5
+  - ./premake5 gmake
+  - make clean
+  - make
