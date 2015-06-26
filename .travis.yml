@@ -11,5 +11,7 @@ language: c
 #   - cd build && premake5 gmake
 
 script:
-  - cd src && gcc *.c
-  - cd src && clang *.c
+  - cd src
+  - gcc -std=c99 *.c ../test/src/*.c ../test/src/cputime/src/*.c
+  - clang *.c ../test/src/*.c ../test/src/cputime/src/*.c
+  - rm a.out
