@@ -5,6 +5,7 @@
 * Switched to premake 5
 * Updated API definitions
 * Added version information access in the API
+* Added build statuses
 
 1.0.5
 -----

@@ -31,9 +31,8 @@
  */
 
 #include <string.h>
-#include "../../src/spookyhash_api.h"
 #include "../../src/spookyhash.h"
-#include "cputime/src/cputime.h"
+#include "../libs/cputime/src/cputime_api.h"
 
 uint64_t m_a;
 uint64_t m_b;

@@ -9,6 +9,11 @@ The function allows a 128-bit seed. It's named SpookyHash because it was release
 
 Centaurean's release of SpookyHash integrates support for big endian platforms and multithreading via context variables.
 
+Branch | Linux | Windows
+--- | --- | ---
+Master | [![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=master)](https://travis-ci.org/centaurean/spookyhash) | [![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/master?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/master)
+Dev | [![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=dev)](https://travis-ci.org/centaurean/spookyhash) | [![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/dev?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/dev)
+
 Why use SpookyHash ?
 --------------------
 
@@ -32,7 +37,7 @@ To build a static and dynamic library, as well as a test binary of SpookyHash on
 
 or alternatively, on windows for example :
 
-    premake5.exe vs2010
+    premake5.exe vs2013
 
 Quick start
 -----------

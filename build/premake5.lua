@@ -44,6 +44,7 @@ os.execute("git submodule update --init --recursive")
 
 solution "SpookyHash"
 	configurations { "Release" }
+	buildoptions { "-std=c99" }
 	flags { "OptimizeSpeed", "NoFramePointer", "LinkTimeOptimization" }
 
 	project "spookyhash-static"
@@ -68,7 +69,9 @@ solution "SpookyHash"
 		kind "ConsoleApp"
 		language "C"
 		files {
-			"../test/src/**.h",
-			"../test/src/**.c"
+			"../test/libs/**.h",
+			"../test/libs/**.c",
+			"../test/src/*.h",
+			"../test/src/*.c"
 		}
 		links { "spookyhash-static" }
