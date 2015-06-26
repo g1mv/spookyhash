@@ -1,13 +1,15 @@
 language: c
-compiler:
-  - clang
-  - gcc
+
+# compiler:
+#   - clang
+#   - gcc
   
-before_install:
-  - sudo apt-get -qq --yes install premake5
+# before_install:
+#   - sudo apt-get -qq --yes install premake5
   
-before_script:
-  - cd build && premake5 gmake
+# before_script:
+#   - cd build && premake5 gmake
 
 script:
-  - make
+  - cd src && gcc *.c
+  - cd src && clang *.c
