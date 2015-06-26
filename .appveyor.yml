@@ -12,7 +12,7 @@ install:
 
 build_script:
   - premake5 gmake
-  - set PATH=C:\MinGW\bin;C:\projects\spookyhash\bin\;%PATH%
+  - set PATH=C:\MinGW\bin;C:\projects\spookyhash\build\bin\;%PATH%
   - make clean
   - make
   - spookyhash-test
