@@ -5,10 +5,13 @@ install:
   - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-windows.zip -OutFile premake5.zip
   - 7z x premake5.zip
   - del premake5.zip
+  - ps: wget http://downloads.sourceforge.net/project/gnuwin32/make/3.81/make-3.81-bin.zip
+  - cmd: 7z x make-3.81-bin.zip
+  - cmd: del make-3.81-bin.zip
 
 build_script:
   - premake5 gmake
-  - set PATH=C:\MinGW\bin;%PATH%
-  - ps: mingw32-make clean
-  - ps: mingw32-make
+  - set PATH=C:\MinGW\bin;C:\projects\spookyhash\make-3.81-bin\bin\;%PATH%
+  - make clean
+  - make
   - spookyhash-test
