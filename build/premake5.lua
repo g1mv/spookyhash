@@ -34,8 +34,8 @@
 -- 2/05/15 23:04
 --
 
-if os.execute("git --version") > 0 then
-	io.write("Please install Git, it is required to update submodules.")
+if os.execute("git --version") == false then
+	io.write("Please install Git, it is required for submodules updating.")
 	os.exit(0)
 end
 
@@ -44,8 +44,10 @@ os.execute("git submodule update --init --recursive")
 
 solution "SpookyHash"
 	configurations { "Release" }
-	buildoptions { "-std=c99" }
-	flags { "OptimizeSpeed", "NoFramePointer", "LinkTimeOptimization" }
+	flags { "NoFramePointer", "LinkTimeOptimization" }
+	optimize "Speed"
+	cdialect "C99"
+	warnings "Extra"
 
 	project "spookyhash-static"
 		targetname ("spookyhash")
