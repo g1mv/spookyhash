@@ -25,7 +25,7 @@ matrix:
             - qemu-user-static
             - gcc-aarch64-linux-gnu
             - g++-aarch64-linux-gnu
-      env: QEMU_INTERPRETER=qemu-aarch64-static C_COMPILER=aarch64-linux-gnu-gcc TOOLSET=gcc LTO=on ARCH=native
+      env: QEMU_INTERPRETER=qemu-aarch64-static GCCPREFIX=aarch64-linux-gnu- TOOLSET=gcc LTO=on ARCH=native
 
     - dist: trusty
       sudo: required
@@ -36,7 +36,7 @@ matrix:
             - qemu-user-static
             - gcc-arm-linux-gnueabi
             - g++-arm-linux-gnueabi
-      env: QEMU_INTERPRETER=qemu-arm-static C_COMPILER=arm-linux-gnueabi-gcc TOOLSET=gcc LTO=on ARCH=native
+      env: QEMU_INTERPRETER=qemu-arm-static GCCPREFIX=arm-linux-gnueabi- TOOLSET=gcc LTO=on ARCH=native
 
     - dist: trusty
       sudo: required
@@ -47,7 +47,7 @@ matrix:
             - qemu-user-static
             - gcc-powerpc-linux-gnu
             - g++-powerpc-linux-gnu
-      env: QEMU_INTERPRETER=qemu-ppc64-static C_COMPILER=powerpc-linux-gnu-gcc TOOLSET=gcc LTO=on ARCH=x64
+      env: QEMU_INTERPRETER=qemu-ppc64-static GCCPREFIX=powerpc-linux-gnu- TOOLSET=gcc LTO=on ARCH=x64
 
     - dist: trusty
       sudo: required
@@ -58,7 +58,7 @@ matrix:
             - qemu-user-static
             - gcc-powerpc-linux-gnu
             - g++-powerpc-linux-gnu
-      env: QEMU_INTERPRETER=qemu-ppc-static C_COMPILER=powerpc-linux-gnu-gcc TOOLSET=gcc LTO=on ARCH=native
+      env: QEMU_INTERPRETER=qemu-ppc-static GCCPREFIX=powerpc-linux-gnu- TOOLSET=gcc LTO=on ARCH=native
 
     - dist: trusty
       sudo: required
@@ -136,7 +136,7 @@ matrix:
             - llvm-toolchain-trusty-3.5
           packages:
             - clang-3.5
-      env: C_COMPILER=clang-3.5 TOOLSET=clang LTO=off ARCH=native
+      env: C_COMPILER=clang-3.5 TOOLSET=clang LTO=on ARCH=native
 
     - dist: trusty
       sudo: required
@@ -189,9 +189,9 @@ before_install:
 
 script:
   - tar zxvf premake.tar.gz
-  - ./premake5 gmake --toolset=$TOOLSET --lto=$LTO --arch=$ARCH
+  - ./premake5 gmake --toolset=$TOOLSET --lto=$LTO --arch=$ARCH --gccprefix=$GCCPREFIX
   - $C_COMPILER -v
   - make CC=$C_COMPILER
   - ls -la ./bin/Release/
   - file ./bin/Release/*
-  - ./bin/Release/spookyhash-test
+#  - $QEMU_INTERPRETER ./bin/Release/spookyhash-test

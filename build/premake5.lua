@@ -34,6 +34,9 @@
 -- 2/05/15 23:04
 --
 
+-- LTO with static libs
+premake.tools.gcc.ar = "gcc-ar"
+
 newoption {
 	trigger = "toolset",
 	value = "TOOLSET",
@@ -68,6 +71,18 @@ newoption {
 	}
 }
 
+newoption {
+	trigger = "gccprefix",
+	value = "GCC prefix",
+	description = "Select GCC prefix",
+	allowed = {
+	  { "aarch64-linux-gnu-", "aarch64-linux-gnu-" },
+  	  { "arm-linux-gnueabi-", "arm-linux-gnueabi-" },
+  	  { "powerpc-linux-gnu-", "powerpc-linux-gnu-" },
+  	  { "", "" },
+	}
+}
+
 if _OPTIONS["toolset"] == "clang" then
 	toolset "clang"
 	io.write("Using Clang toolset\n")
@@ -83,6 +98,10 @@ end
 if _OPTIONS["toolset"] == "msc-llvm-vs2014" then
 	toolset "msc-llvm-vs2014"
 	io.write("Using MSC/LLVM toolset\n")
+end
+
+if _OPTIONS["gccprefix"] then
+	gccprefix(_OPTIONS["gccprefix"])
 end
 
 -- Submodules update
