@@ -186,7 +186,6 @@ before_install:
   - cd build
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then wget https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-macosx.tar.gz -O premake.tar.gz; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-linux.tar.gz -O premake.tar.gz; fi
-  - sudo apt-get install llvm-3.6-dev
 
 script:
   - tar zxvf premake.tar.gz
