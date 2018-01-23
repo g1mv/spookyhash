@@ -34,9 +34,55 @@
 -- 2/05/15 23:04
 --
 
-if os.execute("git --version") == false then
-	io.write("Please install Git, it is required for submodules updating.")
-	os.exit(0)
+newoption {
+	trigger = "toolset",
+	value = "TOOLSET",
+	description = "Choose a custom toolset",
+	allowed = {
+	  { "clang", "Clang" },
+	  { "gcc", "GCC" },
+	  { "msc", "MSC" },
+	  { "msc-llvm-vs2014", "LSC/LLVM"}
+	}
+}
+
+newoption {
+	trigger = "lto",
+	value = "LTO",
+	description = "Link time optimisations",
+	allowed = {
+	  { "on", "On" },
+	  { "off", "Off" },
+	}
+}
+
+newoption {
+	trigger = "arch",
+	value = "Architecture",
+	description = "Select architecture",
+	allowed = {
+	  { "x32", "x32" },
+  	  { "x64", "x64" },
+  	  { "arm", "ARM" },
+  	  { "native", "Native" },
+	}
+}
+
+if _OPTIONS["toolset"] == "clang" then
+	toolset "clang"
+	io.write("Using Clang toolset\n")
+end
+if _OPTIONS["toolset"] == "gcc" then
+	toolset "gcc"
+	io.write("Using GCC toolset\n")
+end
+if _OPTIONS["toolset"] == "msc" then
+	toolset "msc"
+	io.write("Using MSC toolset\n")
+end
+if _OPTIONS["toolset"] == "msc-llvm-vs2014" then
+	toolset "msc-llvm-vs2014"
+	io.write("Using MSC/LLVM toolset\n")
 end
 
 -- Submodules update
@@ -44,10 +90,34 @@ os.execute("git submodule update --init --recursive")
 
 solution "SpookyHash"
 	configurations { "Release" }
-	flags { "NoFramePointer", "LinkTimeOptimization" }
+	if _OPTIONS["lto"] == "off" then
+		flags { "NoFramePointer" }
+		io.write("Disabling link time optimizations\n")
+	else
+		flags { "NoFramePointer", "LinkTimeOptimization" }
+	end
 	optimize "Speed"
 	cdialect "C99"
 	warnings "Extra"
+
+	if _OPTIONS["arch"] then
+		if _OPTIONS["arch"] == "x32" then
+			architecture "x32"
+		end
+		if _OPTIONS["arch"] == "x64" then
+			architecture "x64"
+		end
+		if _OPTIONS["arch"] == "arm" then
+			architecture "ARM"
+		end
+		io.write("Using " .. _OPTIONS["arch"] .. " architecture\n")
+	else
+		-- Prefer 64bit binary if system architecture is 64bit
+ 		if os.is64bit() then
+			architecture "x64"
+			io.write("Using x64 architecture\n")
+		end
+	end
 
 	project "spookyhash-static"
 		targetname ("spookyhash")
