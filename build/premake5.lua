@@ -34,8 +34,11 @@
 -- 2/05/15 23:04
 --
 
--- LTO with static libs
-premake.tools.gcc.ar = "gcc-ar"
+newoption {
+	trigger = "ar",
+	value = "AR",
+	description = "Custom ar",
+}
 
 newoption {
 	trigger = "toolset",
@@ -79,29 +82,29 @@ newoption {
 	  { "aarch64-linux-gnu-", "aarch64-linux-gnu-" },
   	  { "arm-linux-gnueabi-", "arm-linux-gnueabi-" },
   	  { "powerpc-linux-gnu-", "powerpc-linux-gnu-" },
-  	  { "", "" },
 	}
 }
+
+if _OPTIONS["gccprefix"] then
+	gccprefix(_OPTIONS["gccprefix"])
+end
+
+if _OPTIONS["ar"] then
+	premake.tools.gcc.ar = _OPTIONS["ar"]
+end
 
 if _OPTIONS["toolset"] == "clang" then
 	toolset "clang"
 	io.write("Using Clang toolset\n")
-end
-if _OPTIONS["toolset"] == "gcc" then
+elseif _OPTIONS["toolset"] == "gcc" then
 	toolset "gcc"
 	io.write("Using GCC toolset\n")
-end
-if _OPTIONS["toolset"] == "msc" then
+elseif _OPTIONS["toolset"] == "msc" then
 	toolset "msc"
 	io.write("Using MSC toolset\n")
-end
-if _OPTIONS["toolset"] == "msc-llvm-vs2014" then
+elseif _OPTIONS["toolset"] == "msc-llvm-vs2014" then
 	toolset "msc-llvm-vs2014"
 	io.write("Using MSC/LLVM toolset\n")
-end
-
-if _OPTIONS["gccprefix"] then
-	gccprefix(_OPTIONS["gccprefix"])
 end
 
 -- Submodules update
@@ -122,11 +125,9 @@ solution "SpookyHash"
 	if _OPTIONS["arch"] then
 		if _OPTIONS["arch"] == "x32" then
 			architecture "x32"
-		end
-		if _OPTIONS["arch"] == "x64" then
+		elseif _OPTIONS["arch"] == "x64" then
 			architecture "x64"
-		end
-		if _OPTIONS["arch"] == "arm" then
+		elseif _OPTIONS["arch"] == "arm" then
 			architecture "ARM"
 		end
 		io.write("Using " .. _OPTIONS["arch"] .. " architecture\n")
