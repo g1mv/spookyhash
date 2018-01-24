@@ -1,0 +1,59 @@
+version: 1.0.{build}
+
+matrix:
+  fast_finish: true
+
+environment:
+  matrix:
+  - TOOLSET: "mingw32"
+    C_COMPILER: "gcc"
+    TARGET: "gmake"
+    PREMAKE_OPTIONS: "--arch=x32"
+    MAKE: "mingw32-make.exe"
+    MAKE_OPTIONS: "CC=%C_COMPILER%"
+
+  - TOOLSET: "mingw64"
+    C_COMPILER: "gcc"
+    TARGET: "gmake"
+    MAKE: "mingw32-make.exe"
+    MAKE_OPTIONS: "CC=%C_COMPILER%"
+
+  - TOOLSET: "MSC(32bit)"
+    TARGET: "vs2015"
+    PREMAKE_OPTIONS: "--arch=x32"
+    MAKE: "msbuild"
+    MAKE_OPTIONS: "SpookyHash.sln"
+
+  - TOOLSET: "MSC(64bit)"
+    TARGET: "vs2015"
+    MAKE: "msbuild"
+    MAKE_OPTIONS: "SpookyHash.sln"
+
+  - TOOLSET: "MSC/LLVM(32bit)"
+    TARGET: "vs2015"
+    PREMAKE_OPTIONS: "--arch=x32 --toolset=msc-llvm-vs2014"
+    MAKE: "msbuild"
+    MAKE_OPTIONS: "SpookyHash.sln"
+
+  - TOOLSET: "MSC/LLVM(64bit)"
+    TARGET: "vs2015"
+    PREMAKE_OPTIONS: "--toolset=msc-llvm-vs2014"
+    MAKE: "msbuild"
+    MAKE_OPTIONS: "SpookyHash.sln"
+
+install:
+  - cmd: set "MINGW32_PATH=c:\MinGW\bin;c:\MinGW\usr\bin"
+  - cmd: set "MINGW64_PATH=c:\msys64\mingw64\bin;c:\msys64\usr\bin"
+  - cmd: if [%TOOLSET%]==[mingw32] SET PATH=%MINGW32_PATH%;%PATH%
+  - cmd: if [%TOOLSET%]==[mingw64] SET PATH=%MINGW64_PATH%;%PATH%
+  - cmd: cd build
+  - ps: wget https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip -OutFile premake5.zip
+  - cmd: 7z x premake5.zip
+  - cmd: del premake5.zip
+
+build_script:
+  - cmd: echo Building with %TOOLSET% %C_COMPILER%
+  - cmd: premake5 %TARGET% %PREMAKE_OPTIONS% && %MAKE% %MAKE_OPTIONS%
+  - cmd: dir bin\Release\
+  - cmd: file bin/Release/*
+  - cmd: bin\Release\spookyhash-test

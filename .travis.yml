@@ -1,10 +1,264 @@
 language: c
+matrix:
+  fast_finish: true
+  include:
+    # OS X Mavericks
+    - os: osx
+      env: C_COMPILER=clang TOOLSET=clang AR="ar" ARCH=native LTO=on
+
+    - os: osx
+      env: C_COMPILER=gcc TOOLSET=gcc AR="ar" ARCH=native LTO=on
+
+    # Container-based Ubuntu 12.04 LTS Server Edition 64 bit (doesn't support 32-bit includes)
+    - os: linux
+      sudo: false
+      env: C_COMPILER=gcc TOOLSET=gcc AR="gcc-ar" ARCH=native LTO=on
+
+    - os: linux
+      sudo: false
+      env: C_COMPILER=clang TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    # Ubuntu 14.04 LTS Server Edition 64 bit
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages:
+            - qemu-system-arm
+            - qemu-user-static
+            - gcc-aarch64-linux-gnu
+            - gcc-multilib
+            - libc6-dev-i386
+      env: C_COMPILER=aarch64-linux-gnu-gcc TOOLSET=gcc AR="ar" ARCH=native LTO=on GCCPREFIX=aarch64-linux-gnu- QEMU_INTERPRETER=qemu-aarch64-static
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages:
+            - qemu-system-arm
+            - qemu-user-static
+            - gcc-arm-linux-gnueabi
+            - gcc-multilib
+            - libc6-dev-i386
+      env: C_COMPILER=arm-linux-gnueabi-gcc TOOLSET=gcc AR="ar" ARCH=native LTO=on, GCCPREFIX=arm-linux-gnueabi- QEMU_INTERPRETER=qemu-arm-static
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages:
+            - qemu-system-ppc
+            - qemu-user-static
+            - gcc-powerpc-linux-gnu
+      env: C_COMPILER=powerpc-linux-gnu-gcc TOOLSET=gcc AR="gcc-ar" ARCH=x64 LTO=on GCCPREFIX=powerpc-linux-gnu- QEMU_INTERPRETER=qemu-ppc64-static
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages:
+            - qemu-system-ppc
+            - qemu-user-static
+            - gcc-powerpc-linux-gnu
+      env: C_COMPILER=powerpc-linux-gnu-gcc TOOLSET=gcc AR="gcc-ar" ARCH=native LTO=on GCCPREFIX=powerpc-linux-gnu- QEMU_INTERPRETER=qemu-ppc-static
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.8
+      env: C_COMPILER=gcc-4.8 TOOLSET=gcc AR="gcc-ar-4.8" ARCH=native LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.8
+            - gcc-4.8-multilib
+      env: C_COMPILER=gcc-4.8 TOOLSET=gcc AR="gcc-ar-4.8" ARCH=x32 LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+      env: C_COMPILER=gcc-4.9 TOOLSET=gcc AR=gcc-ar-4.9 ARCH=native LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+            - gcc-4.9-multilib
+      env: C_COMPILER=gcc-4.9 TOOLSET=gcc AR=gcc-ar-4.9 ARCH=x32 LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+      env: C_COMPILER=gcc-5 TOOLSET=gcc AR=gcc-ar-5 ARCH=native LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - gcc-5-multilib
+      env: C_COMPILER=gcc-5 TOOLSET=gcc AR=gcc-ar-5 ARCH=x32 LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-6
+      env: C_COMPILER=gcc-6 TOOLSET=gcc AR=gcc-ar-6 ARCH=native LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-6
+            - gcc-6-multilib
+      env: C_COMPILER=gcc-6 TOOLSET=gcc AR=gcc-ar-6 ARCH=x32 LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+      env: C_COMPILER=gcc-7 TOOLSET=gcc AR=gcc-ar-7 ARCH=native LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - gcc-7-multilib
+      env: C_COMPILER=gcc-7 TOOLSET=gcc AR=gcc-ar-7 ARCH=x32 LTO=on
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.5
+          packages:
+            - clang-3.5
+      env: C_COMPILER=clang-3.5 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.6
+          packages:
+            - clang-3.6
+      env: C_COMPILER=clang-3.6 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.8
+          packages:
+            - clang-3.7
+      env: C_COMPILER=clang-3.7 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.8
+          packages:
+            - clang-3.8
+      env: C_COMPILER=clang-3.8 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.9
+          packages:
+            - clang-3.9
+      env: C_COMPILER=clang-3.9 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-4.0
+          packages:
+            - clang-4.0
+      env: C_COMPILER=clang-4.0 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+    - dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+      env: C_COMPILER=clang-5.0 TOOLSET=clang AR="ar" ARCH=native LTO=off
+
+before_install:
+  - cd build
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      wget https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-macosx.tar.gz -O premake.tar.gz || travis_terminate 1;
+    else
+      wget https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-linux.tar.gz -O premake.tar.gz || travis_terminate 1;
+    fi
 
 script:
-  - cd build
-  - wget https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-5.0.0.alpha4-linux.tar.gz
-  - tar zxvf premake-5.0.0.alpha4-linux.tar.gz
-  - ./premake5 gmake
-  - make clean
-  - make
-  - ./spookyhash-test
+  - $C_COMPILER -v
+  - tar zxvf premake.tar.gz
+  - if [[ $GCCPREFIX == "" ]]; then ./premake5 gmake --toolset=$TOOLSET --ar=$AR --arch=$ARCH --lto=$LTO || travis_terminate 1; fi
+  - if [[ $GCCPREFIX != "" ]]; then ./premake5 gmake --toolset=$TOOLSET --ar=$AR --arch=$ARCH --lto=$LTO --gccprefix=$GCCPREFIX || travis_terminate 1; fi
+  - make CC=$C_COMPILER
+  - ls -la ./bin/Release/
+  - file ./bin/Release/*
+  - $QEMU_INTERPRETER ./bin/Release/spookyhash-test

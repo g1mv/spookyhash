@@ -9,19 +9,19 @@ The function allows a 128-bit seed. It's named SpookyHash because it was release
 
 Centaurean's release of SpookyHash integrates support for big endian platforms and multithreading via context variables.
 
-Branch | Linux | Windows
+Branch|Linux & OSX|Windows
 --- | --- | ---
-Master | [![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=master)](https://travis-ci.org/centaurean/spookyhash) | [![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/master?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/master)
-Dev | [![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=dev)](https://travis-ci.org/centaurean/spookyhash) | [![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/dev?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/dev)
+master|[![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=master)](https://travis-ci.org/centaurean/spookyhash)|[![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/master?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/master)
+dev|[![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=dev)](https://travis-ci.org/centaurean/spookyhash)|[![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/dev?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/dev)
 
 Why use SpookyHash ?
 --------------------
 
-* It's fast. For short keys it's 1 byte per cycle, with a 30 cycle startup cost. For long keys, well, it would be 3 bytes per cycle, and that only occupies one core. Except you'll hit the limit of how fast uncached memory can be read, which on my home machines is less than 2 bytes per cycle.
-* It's good. It achieves avalanche for 1-bit and 2-bit inputs. It works for any type of key that can be made to look like an array of bytes, or list of arrays of bytes. It takes a seed, so it can produce many different independent hashes for the same key.
-* It can produce up to 128-bit results. Large systems should consider using 128-bit checksums nowadays. A library with 4 billion documents is expected to have about 1 colliding 64-bit checksum no matter how good the hash is. Libraries using 128-bit checksums should expect 1 collision once they hit 16 quintillion documents. (Due to limited hardware, I can only verify SpookyHash is as good as a good 73-bit checksum. It might be better, I can't tell.)
-* When NOT to use it: if you have an opponent. This is not cryptographic. Given a message, a resourceful opponent could write a tool that would produce a modified message with the same hash as the original message. Once such a tool is written, a not-so-resourceful opponent could borrow the tool and do the same thing.
-* Another case not to use it: CRCs have a nice property that you can split a message up into pieces arbitrarily, calculate the CRC all the pieces, then afterwards combine the CRCs for the pieces to find the CRC for the concatenation of all those pieces. SpookyHash can't. If you could deterministically choose what the pieces were, though, you could compute the hashes for pieces with SpookyHash (or CityHash or any other hash), then treat those hash values as the raw data, and do CRCs on top of that.
+*   It's fast. For short keys it's 1 byte per cycle, with a 30 cycle startup cost. For long keys, well, it would be 3 bytes per cycle, and that only occupies one core. Except you'll hit the limit of how fast uncached memory can be read, which on my home machines is less than 2 bytes per cycle.
+*   It's good. It achieves avalanche for 1-bit and 2-bit inputs. It works for any type of key that can be made to look like an array of bytes, or list of arrays of bytes. It takes a seed, so it can produce many different independent hashes for the same key.
+*   It can produce up to 128-bit results. Large systems should consider using 128-bit checksums nowadays. A library with 4 billion documents is expected to have about 1 colliding 64-bit checksum no matter how good the hash is. Libraries using 128-bit checksums should expect 1 collision once they hit 16 quintillion documents. (Due to limited hardware, I can only verify SpookyHash is as good as a good 73-bit checksum. It might be better, I can't tell.)
+*   When NOT to use it: if you have an opponent. This is not cryptographic. Given a message, a resourceful opponent could write a tool that would produce a modified message with the same hash as the original message. Once such a tool is written, a not-so-resourceful opponent could borrow the tool and do the same thing.
+*   Another case not to use it: CRCs have a nice property that you can split a message up into pieces arbitrarily, calculate the CRC all the pieces, then afterwards combine the CRCs for the pieces to find the CRC for the concatenation of all those pieces. SpookyHash can't. If you could deterministically choose what the pieces were, though, you could compute the hashes for pieces with SpookyHash (or CityHash or any other hash), then treat those hash values as the raw data, and do CRCs on top of that.
 
 Build
 -----
@@ -31,13 +31,21 @@ To build a static and dynamic library, as well as a test binary of SpookyHash on
 
 2) Run the following from the command line
 
-    cd build
+```
+    git clone https://github.com/centaurean/spookyhash.git
+    cd spookyhash/build
     premake5 gmake
     make
+```
 
-or alternatively, on windows for example :
+or alternatively, on Windows for example :
 
-    premake5.exe vs2013
+```
+    premake5.exe vs2017
+    msbuild CPUTime.sln
+```
+
+If msbuild.exe is not available in your path, just launch Visual Studio by double clicking on SpookyHash.sln and build the library inside the IDE.
 
 Quick start
 -----------
@@ -45,17 +53,20 @@ Quick start
 #include "spookyhash_api.h"
 
 void hash(void* data, size_t data_length) {
-    uint64_t c, d, seed1 = 1, seed2 = 2;
-    uint32_t seed32 = 3;
-    
+    uint64_t seed1 = 0xabcdef, seed2 = 0xfedcba;
+    uint32_t seed3 = 0x12ab;
+
     // Direct use example
-    spookyhash_128(data, data_length, &c, &d);                          // c and d now contain the resulting 128-bit hash in two uint64_t parts
-    uint64_t hash64 = spookyhash_64(data, data_length, seed1);          // Produce 64-bit hash
-    uint32_t hash32 = spookyhash_32(data, data_length, seed32);         // Produce 32-bit hash
-    
+    spookyhash_128(data, data_length, &seed1, &seed2);                  // Initially, seed1 and seed2 are used as seeds for the hash,
+                                                                        // on function return they contain the resulting 128-bit hash in two uint64_t parts
+    uint64_t hash64 = spookyhash_64(data, data_length, seed1);          // Produce 64-bit hash from seed1
+    uint32_t hash32 = spookyhash_32(data, data_length, seed3);          // Produce 32-bit hash from seed3
+
     // Stream use example
     spookyhash_context context;                                         // Create a context variable
-    spookyhash_context_init(&context, seed1, seed2);                    // Initialize the context
+    spookyhash_context_init(&context, seed1, seed2);                    // Initialize the context with seed1 and seed2
     spookyhash_update(&context, data, data_length);                     // Add data to hash, use this function repeatedly
-    spookyhash_final(&context, &c, &d);                                 // c and d now contain the resulting 128-bit hash in two uint64_t parts
+    ...
+    spookyhash_final(&context, &seed1, &seed2);                         // seed1 and seed2 now contain the resulting 128-bit hash in two uint64_t parts
 }
+```

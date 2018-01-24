@@ -343,6 +343,7 @@ void test_pieces() {
 #undef BUFSIZE
 
 int main(int argc, const char **argv) {
+    (void)argv;
     test_results();
     test_alignment();
     test_pieces();
@@ -350,5 +351,5 @@ int main(int argc, const char **argv) {
     do_timing_small(argc);
     test_deltas(argc);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
