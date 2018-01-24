@@ -16,7 +16,7 @@ matrix:
 
     - os: linux
       sudo: false
-      env: C_COMPILER=clang TOOLSET=clang AR="ar" ARCH=native LTO=off
+      env: C_COMPILER=clang TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
     # Ubuntu 14.04 LTS Server Edition 64 bit
     - dist: trusty
@@ -175,7 +175,8 @@ matrix:
             - llvm-toolchain-trusty-3.5
           packages:
             - clang-3.5
-      env: C_COMPILER=clang-3.5 TOOLSET=clang AR="ar" ARCH=native LTO=off
+            - llvm-3.5-dev
+      env: C_COMPILER=clang-3.5 TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
     - dist: trusty
       sudo: required
@@ -186,7 +187,8 @@ matrix:
             - llvm-toolchain-trusty-3.6
           packages:
             - clang-3.6
-      env: C_COMPILER=clang-3.6 TOOLSET=clang AR="ar" ARCH=native LTO=off
+            - llvm-3.6-dev
+      env: C_COMPILER=clang-3.6 TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
     - dist: trusty
       sudo: required
@@ -197,7 +199,8 @@ matrix:
             - llvm-toolchain-trusty-3.8
           packages:
             - clang-3.8
-      env: C_COMPILER=clang-3.8 TOOLSET=clang AR="ar" ARCH=native LTO=off
+            - llvm-3.8-dev
+      env: C_COMPILER=clang-3.8 TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
     - dist: trusty
       sudo: required
@@ -208,7 +211,8 @@ matrix:
             - llvm-toolchain-trusty-3.9
           packages:
             - clang-3.9
-      env: C_COMPILER=clang-3.9 TOOLSET=clang AR="ar" ARCH=native LTO=off
+            - llvm-3.9-dev
+      env: C_COMPILER=clang-3.9 TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
     - dist: trusty
       sudo: required
@@ -219,7 +223,8 @@ matrix:
             - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
-      env: C_COMPILER=clang-4.0 TOOLSET=clang AR="ar" ARCH=native LTO=off
+            - llvm-4.0-dev
+      env: C_COMPILER=clang-4.0 TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
     - dist: trusty
       sudo: required
@@ -230,7 +235,8 @@ matrix:
             - llvm-toolchain-trusty-5.0
           packages:
             - clang-5.0
-      env: C_COMPILER=clang-5.0 TOOLSET=clang AR="ar" ARCH=native LTO=off
+            - llvm-5.0-dev
+      env: C_COMPILER=clang-5.0 TOOLSET=clang AR="llvm-ar" ARCH=native LTO=on
 
 before_install:
   - cd build
@@ -248,4 +254,4 @@ script:
   - make CC=$C_COMPILER
   - ls -la ./bin/Release/
   - file ./bin/Release/*
-  - $QEMU_INTERPRETER ./bin/Release/spookyhash-test
+#  - $QEMU_INTERPRETER ./bin/Release/spookyhash-test
