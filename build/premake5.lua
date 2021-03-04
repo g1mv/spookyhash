@@ -1,7 +1,7 @@
 #!lua
 
 --
--- Centaurean SpookyHash
+-- SpookyHash
 --
 -- Copyright (c) 2015, Guillaume Voirin
 -- All rights reserved.

@@ -7,12 +7,12 @@ It produces well-distributed 128-bit hash values for byte arrays of any length.
 It can produce 64-bit and 32-bit hash values too, at the same speed, just use the bottom n bits. Long keys hash in 3 bytes per cycle, short keys take about 1 byte per cycle, and there is a 30 cycle startup cost. Keys can be supplied in fragments.
 The function allows a 128-bit seed. It's named SpookyHash because it was released on Halloween.
 
-Centaurean's release of SpookyHash integrates support for big endian platforms and multithreading via context variables.
+This release of SpookyHash integrates support for big endian platforms and multithreading via context variables.
 
 Branch|Linux & OSX|Windows
 --- | --- | ---
-master|[![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=master)](https://travis-ci.org/centaurean/spookyhash)|[![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/master?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/master)
-dev|[![Build Status](https://travis-ci.org/centaurean/spookyhash.svg?branch=dev)](https://travis-ci.org/centaurean/spookyhash)|[![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/dev?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/dev)
+master|[![Build Status](https://travis-ci.org/k0dai/spookyhash.svg?branch=master)](https://travis-ci.org/k0dai/spookyhash)|[![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/master?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/master)
+dev|[![Build Status](https://travis-ci.org/k0dai/spookyhash.svg?branch=dev)](https://travis-ci.org/k0dai/spookyhash)|[![Build status](https://ci.appveyor.com/api/projects/status/d3w4v68a5ws27g73/branch/dev?svg=true)](https://ci.appveyor.com/project/gpnuma/spookyhash/branch/dev)
 
 Why use SpookyHash ?
 --------------------
@@ -32,7 +32,7 @@ To build a static and dynamic library, as well as a test binary of SpookyHash on
 2) Run the following from the command line
 
 ```
-    git clone https://github.com/centaurean/spookyhash.git
+    git clone https://github.com/k0dai/spookyhash.git
     cd spookyhash/build
     premake5 gmake
     make
